@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NewsCell" rowHeight="93" id="t0G-dF-Pl3" customClass="NewsCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="93"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="t0G-dF-Pl3" id="KDJ-0y-Qon">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="92.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nfr-HX-5NT">
+                        <rect key="frame" x="8" y="8" width="304" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.53333333333333333" green="0.53333333333333333" blue="0.53333333333333333" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZVF-ZZ-VHZ">
+                        <rect key="frame" x="8" y="36" width="304" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UMT-oo-LwF">
+                        <rect key="frame" x="8" y="65" width="304" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="ZVF-ZZ-VHZ" firstAttribute="leading" secondItem="KDJ-0y-Qon" secondAttribute="leading" constant="8" id="5hA-pd-pUm"/>
+                    <constraint firstItem="Nfr-HX-5NT" firstAttribute="leading" secondItem="KDJ-0y-Qon" secondAttribute="leading" constant="8" id="6ds-nA-as0"/>
+                    <constraint firstAttribute="trailing" secondItem="ZVF-ZZ-VHZ" secondAttribute="trailing" constant="8" id="Klr-wb-gOc"/>
+                    <constraint firstItem="Nfr-HX-5NT" firstAttribute="top" secondItem="KDJ-0y-Qon" secondAttribute="top" constant="8" id="QLf-JT-V05"/>
+                    <constraint firstItem="UMT-oo-LwF" firstAttribute="top" secondItem="ZVF-ZZ-VHZ" secondAttribute="bottom" constant="8" id="XKq-dK-E9E"/>
+                    <constraint firstItem="ZVF-ZZ-VHZ" firstAttribute="top" secondItem="Nfr-HX-5NT" secondAttribute="bottom" constant="8" id="cud-f8-OUJ"/>
+                    <constraint firstItem="UMT-oo-LwF" firstAttribute="trailing" secondItem="KDJ-0y-Qon" secondAttribute="trailingMargin" id="dd2-KF-MMw"/>
+                    <constraint firstAttribute="trailing" secondItem="Nfr-HX-5NT" secondAttribute="trailing" constant="8" id="sEc-JD-q82"/>
+                    <constraint firstItem="UMT-oo-LwF" firstAttribute="leading" secondItem="KDJ-0y-Qon" secondAttribute="leadingMargin" id="vFr-Wu-CYH"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="tabLabel" destination="Nfr-HX-5NT" id="S2Z-fP-SUc"/>
+                <outlet property="timeLabel" destination="UMT-oo-LwF" id="UBp-k8-JJb"/>
+                <outlet property="titleLabel" destination="ZVF-ZZ-VHZ" id="5YN-UY-QJc"/>
+            </connections>
+            <point key="canvasLocation" x="257" y="262.25"/>
+        </tableViewCell>
+    </objects>
+</document>
