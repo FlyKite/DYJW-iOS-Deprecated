@@ -78,7 +78,8 @@
 		A6870A461C3400CF007021A8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6870A451C3400CF007021A8 /* ViewController.m */; };
 		A6870A481C3400F9007021A8 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A6870A471C3400F9007021A8 /* Info.plist */; };
 		A6870A4B1C34011E007021A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A6870A4A1C34011E007021A8 /* main.m */; };
-		A6C2E7001BE72B5A00F0330D /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6C2E6FF1BE72B5A00F0330D /* iAd.framework */; };
+		A6870A551C34049B007021A8 /* LiMingHuPanController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6870A531C34049B007021A8 /* LiMingHuPanController.m */; };
+		A6870A561C34049B007021A8 /* LiMingHuPanController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A6870A541C34049B007021A8 /* LiMingHuPanController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -245,7 +246,9 @@
 		A6870A451C3400CF007021A8 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = Application/ViewController.m; sourceTree = "<group>"; };
 		A6870A471C3400F9007021A8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Application/Info.plist; sourceTree = "<group>"; };
 		A6870A4A1C34011E007021A8 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		A6C2E6FF1BE72B5A00F0330D /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		A6870A521C34049B007021A8 /* LiMingHuPanController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiMingHuPanController.h; sourceTree = "<group>"; };
+		A6870A531C34049B007021A8 /* LiMingHuPanController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LiMingHuPanController.m; sourceTree = "<group>"; };
+		A6870A541C34049B007021A8 /* LiMingHuPanController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LiMingHuPanController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,7 +256,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A6C2E7001BE72B5A00F0330D /* iAd.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,7 +279,6 @@
 		A678E3FB1BD51068004BD895 = {
 			isa = PBXGroup;
 			children = (
-				A6C2E6FF1BE72B5A00F0330D /* iAd.framework */,
 				A678E4061BD51068004BD895 /* DYJW */,
 				A678E4201BD51068004BD895 /* DYJWTests */,
 				A678E42B1BD51068004BD895 /* DYJWUITests */,
@@ -398,6 +399,9 @@
 		A68708E51C33D361007021A8 /* LiMingHuPan */ = {
 			isa = PBXGroup;
 			children = (
+				A6870A4C1C340427007021A8 /* Controller */,
+				A6870A4E1C34043A007021A8 /* View */,
+				A6870A4D1C340435007021A8 /* Model */,
 			);
 			name = LiMingHuPan;
 			sourceTree = "<group>";
@@ -513,6 +517,33 @@
 			);
 			name = "Supporting Files";
 			path = "Application/Supporting Files";
+			sourceTree = "<group>";
+		};
+		A6870A4C1C340427007021A8 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				A6870A521C34049B007021A8 /* LiMingHuPanController.h */,
+				A6870A531C34049B007021A8 /* LiMingHuPanController.m */,
+				A6870A541C34049B007021A8 /* LiMingHuPanController.xib */,
+			);
+			name = Controller;
+			path = LiMingHuPan/Controller;
+			sourceTree = "<group>";
+		};
+		A6870A4D1C340435007021A8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
+			path = LiMingHuPan/Model;
+			sourceTree = "<group>";
+		};
+		A6870A4E1C34043A007021A8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = View;
+			path = LiMingHuPan/View;
 			sourceTree = "<group>";
 		};
 		A6C819DE1BE225620049AA61 /* Model */ = {
@@ -763,6 +794,7 @@
 				A678E4141BD51068004BD895 /* Assets.xcassets in Resources */,
 				A68709061C33D5B3007021A8 /* NewsCell.xib in Resources */,
 				A6870A371C3400A2007021A8 /* char_ref.rl in Resources */,
+				A6870A561C34049B007021A8 /* LiMingHuPanController.xib in Resources */,
 				A678E4121BD51068004BD895 /* Main.storyboard in Resources */,
 				A6870A3D1C3400A2007021A8 /* tag.in in Resources */,
 				A68709311C33D6FE007021A8 /* FunctionCell.xib in Resources */,
@@ -836,6 +868,7 @@
 				A68709161C33D664007021A8 /* CourseView.m in Sources */,
 				A6870A421C3400A2007021A8 /* OCGumbo+Query.m in Sources */,
 				A68709371C33D6FE007021A8 /* NavigationDrawer.m in Sources */,
+				A6870A551C34049B007021A8 /* LiMingHuPanController.m in Sources */,
 				A6870A301C3400A2007021A8 /* UIImageView+AFNetworking.m in Sources */,
 				A6870A2E1C3400A2007021A8 /* UIAlertView+AFNetworking.m in Sources */,
 				A6870A2A1C3400A2007021A8 /* AFURLResponseSerialization.m in Sources */,
@@ -993,7 +1026,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				INFOPLIST_FILE = DYJW/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/DYJW/Application/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.doge.von.DYJW;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1008,7 +1041,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				INFOPLIST_FILE = DYJW/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/DYJW/Application/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.doge.von.DYJW;
 				PRODUCT_NAME = "$(TARGET_NAME)";

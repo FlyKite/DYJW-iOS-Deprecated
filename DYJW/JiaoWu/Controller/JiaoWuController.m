@@ -57,7 +57,7 @@
 
 - (void)checkAccount {
     UserInfo *loginUser = [UserInfo userInfo];
-    if (loginUser.username) {
+    if (loginUser.username && loginUser.logintime != 0) {
         // 已经登录过
         [self.systemPanel show];
 //        NSNumber *loginTime = loginUser[@"LOGINTIME"];

@@ -13,6 +13,7 @@
 #import "MainCourseController.h"
 #import "JiaoWuController.h"
 #import "NewsListController.h"
+#import "LiMingHuPanController.h"
 
 #define StatusBarHeight 20
 #define ToolbarHeight 56
@@ -218,6 +219,9 @@
         switch (index) {
             case 0:
                 vc = [[MainCourseController alloc] init];
+                break;
+            case 1:
+                vc = [[LiMingHuPanController alloc] init];
                 break;
             case 2:
                 vc = [[JiaoWuController alloc] init];

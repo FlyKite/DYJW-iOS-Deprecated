@@ -86,6 +86,13 @@
     }];
 }
 
+- (void)logout {
+    self.usernameField.text = @"";
+    self.passwordField.text = @"";
+    self.verifycodeField.text = @"";
+    [self loadVerifyCode];
+}
+
 - (void)setVCImage:(UIImage *)image {
     self.verifycodeImage.image = image;
     self.isLoading = NO;

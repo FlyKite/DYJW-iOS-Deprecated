@@ -97,7 +97,7 @@
 }
 
 - (BOOL)compare:(NSArray*)source position:(int)position dest:(NSArray*)dest {
-    for (int x = position; x < position + dest.count - 1; x++) {
+    for (int x = position; x < position + dest.count - 1 && x < 45; x++) {
         // 计算图片当前列的像素点的比特值
         int lineValue = 0;
         int binBit = 1;

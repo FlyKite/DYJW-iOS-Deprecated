@@ -18,4 +18,5 @@
 @property (nonatomic, weak)UIImageView *verifycodeImage;
 - (void)show;
 - (void)hide;
+- (void)logout;
 @end

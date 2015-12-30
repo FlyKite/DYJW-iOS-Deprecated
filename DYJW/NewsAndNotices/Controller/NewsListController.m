@@ -43,6 +43,7 @@
         scrollView.bounces = NO;
         scrollView.pagingEnabled = YES;
         scrollView.showsHorizontalScrollIndicator = NO;
+        scrollView.canCancelContentTouches = NO;
         [self.view addSubview:scrollView];
         _contentView = scrollView;
     }
