@@ -9,7 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface MDTextField : UITextField
-@property UILabel *label;
-- (void) setLabelText:(NSString *)string;
-- (void) setUnderlineColorOnFocus:(UIColor *)color;
+- (void)setUnderlineColorOnFocus:(UIColor *)color;
 @end

@@ -184,7 +184,11 @@
 
 // 当抽屉中点击按钮时切换rootViewController
 - (void)changeFunction:(NSInteger)index {
-    [self setRootViewControllerWithIndex:index];
+    [self performSelector:@selector(performChangeFunction:) withObject:@(index) afterDelay:0.2];
+}
+
+- (void)performChangeFunction:(NSNumber *)index {
+    [self setRootViewControllerWithIndex:[index integerValue]];
     [self dealHamburgerTap];
 }
 

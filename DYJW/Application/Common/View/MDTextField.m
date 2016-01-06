@@ -9,77 +9,126 @@
 #import "MDTextField.h"
 #import "MDColor.h"
 
-@interface MDTextField () <UITextFieldDelegate> {
-    UIView *underlineGray;
-    UIView *underline;
-    int labelTextSize;
-}
+@interface MDTextField ()
+@property (nonatomic)CATextLayer *placeholderLayer;
+@property (nonatomic, assign)BOOL placeholderUp;
+@property (nonatomic)CAShapeLayer *underlineGrayLayer;
+@property (nonatomic)CAShapeLayer *underlineLayer;
 @end
 
 @implementation MDTextField
-- (id) initWithFrame:(CGRect)frame {
+- (id)initWithFrame:(CGRect)frame {
     frame.size.height = 48;
     if (self = [super initWithFrame:frame]) {
         [self setFont:[UIFont systemFontOfSize:16]];
-        
-        labelTextSize = 12;
-        _label = [[UILabel alloc] init];
-        [_label setFont:[UIFont systemFontOfSize:labelTextSize]];
-        _label.textColor = [MDColor grey500];
-        [self addSubview:_label];
-        
-        underlineGray = [[UIView alloc] init];
-        underlineGray.backgroundColor = [MDColor grey300];
-        [self addSubview:underlineGray];
-        
-        underline = [[UIView alloc] init];
-        underline.backgroundColor = [MDColor lightBlue500];
-        [self addSubview:underline];
-        
-        self.delegate = self;
         self.frame = frame;
+        [self addTarget:self action:@selector(beginEditingAnimation) forControlEvents:UIControlEventEditingDidBegin];
+        [self addTarget:self action:@selector(endEditingAnimation) forControlEvents:UIControlEventEditingDidEnd];
     }
     return self;
 }
 
-- (void) setFrame:(CGRect)frame {
+- (CATextLayer *)placeholderLayer {
+    if (!_placeholderLayer) {
+        _placeholderLayer = [[CATextLayer alloc] init];
+        _placeholderLayer.foregroundColor = [MDColor grey500].CGColor;
+        _placeholderLayer.alignmentMode = kCAAlignmentJustified;
+        _placeholderLayer.wrapped = YES;
+        _placeholderLayer.contentsScale = [[UIScreen mainScreen] scale];
+        
+        UIFont *font = [UIFont systemFontOfSize:12];
+        CFStringRef fontName = (__bridge CFStringRef)font.fontName;
+        CGFontRef fontRef = CGFontCreateWithFontName(fontName);
+        _placeholderLayer.font = fontRef;
+        _placeholderLayer.fontSize = font.pointSize;
+        CGFontRelease(fontRef);
+        [self.layer addSublayer:_placeholderLayer];
+    }
+    return _placeholderLayer;
+}
+
+- (CAShapeLayer *)underlineGrayLayer {
+    if (!_underlineGrayLayer) {
+        _underlineGrayLayer = [[CAShapeLayer alloc] init];
+        _underlineGrayLayer.backgroundColor = [MDColor grey300].CGColor;
+        [self.layer addSublayer:_underlineGrayLayer];
+        
+        CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+        pathAnimation.duration = 0;
+        pathAnimation.fromValue = @(1);
+        pathAnimation.toValue = @(0);
+        pathAnimation.fillMode = kCAFillModeForwards;
+        pathAnimation.removedOnCompletion = NO;
+        [self.underlineLayer addAnimation:pathAnimation forKey:@"transform"];
+    }
+    return _underlineGrayLayer;
+}
+
+- (CAShapeLayer *)underlineLayer {
+    if (!_underlineLayer) {
+        _underlineLayer = [[CAShapeLayer alloc] init];
+        _underlineLayer.backgroundColor = [MDColor lightBlue500].CGColor;
+        [self.layer addSublayer:_underlineLayer];
+    }
+    return _underlineLayer;
+}
+
+- (void)setFrame:(CGRect)frame {
     [super setFrame:frame];
-    _label.frame = CGRectMake(0, 18, frame.size.width, 12);
-    underlineGray.frame = CGRectMake(0, frame.size.height - 9, frame.size.width, 1);
-    underline.frame = CGRectMake(0, frame.size.height - 1, 0, 2);
-    underline.center = CGPointMake(frame.size.width / 2, frame.size.height - 9);
+    self.placeholderLayer.frame = CGRectMake(0, 16, frame.size.width, 14);
+    self.underlineGrayLayer.frame = CGRectMake(0, frame.size.height - 9, frame.size.width, 1);
+    self.underlineLayer.frame = CGRectMake(0, frame.size.height - 9, frame.size.width, 1);
 }
 
-- (void) setLabelText:(NSString *)string {
-    _label.text = string;
+- (void)setPlaceholder:(NSString *)placeholder {
+    self.placeholderLayer.string = placeholder;
 }
 
-- (void) setUnderlineColorOnFocus:(UIColor *)color {
-    underline.backgroundColor = color;
-}
-
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        underline.frame = CGRectMake(0, 0, self.frame.size.width, 2);
-        underline.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height - 9);
-        _label.frame = CGRectMake(0, 0, self.frame.size.width, 12);
-    } completion:nil];
-    return YES;
+- (void)setUnderlineColorOnFocus:(UIColor *)color {
+    self.underlineLayer.backgroundColor = color.CGColor;
 }
 
 - (void)setText:(NSString *)text {
-    [super setText:text];
-    [self textFieldShouldBeginEditing:self];
-    [self textFieldDidEndEditing:self];
+    if (!self.placeholderUp) {
+        [self beginEditingAnimation];
+        [super setText:text];
+        [self endEditingAnimation];
+    } else {
+        [super setText:text];
+    }
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    [UIView animateWithDuration:0.3 animations:^{
-        underline.frame = CGRectMake(0, 0, 0, 2);
-        underline.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height - 9);
-        if ([self.text length] == 0) {
-            _label.frame = CGRectMake(0, 18, self.frame.size.width, 12);
-        }
-    }];
+- (void)editingAnimation:(BOOL)begin {
+    CGFloat width = self.frame.size.width;
+    CGFloat height = self.frame.size.height;
+    CGFloat duration = 0.3;
+    
+    if (self.text.length == 0) {
+        CABasicAnimation *moveAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
+        
+        moveAnimation.fromValue = [NSValue valueWithCGPoint:CGPointMake(width / 2, height / 2 + (begin ? 0 : -18))];
+        moveAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(width / 2, height / 2 + (begin ? -18 : 0))];
+        moveAnimation.duration = duration;
+        moveAnimation.fillMode = kCAFillModeForwards;
+        moveAnimation.removedOnCompletion = NO;
+        [self.placeholderLayer addAnimation:moveAnimation forKey:@"position"];
+        self.placeholderUp = YES;
+    }
+    
+    CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+    pathAnimation.duration = duration;
+    pathAnimation.fromValue = @(begin ? 0 : 1);
+    pathAnimation.toValue = @(begin ? 1 : 0);
+    pathAnimation.fillMode = kCAFillModeForwards;
+    pathAnimation.removedOnCompletion = NO;
+    [self.underlineLayer addAnimation:pathAnimation forKey:@"transform"];
+}
+
+- (void)beginEditingAnimation {
+    [self editingAnimation:YES];
+}
+
+- (void)endEditingAnimation {
+    [self editingAnimation:NO];
 }
 @end

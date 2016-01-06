@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A600FB9C1C3A204D007EF5AB /* UIView+MDRippleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A600FB9B1C3A204D007EF5AB /* UIView+MDRippleView.m */; };
 		A678E4121BD51068004BD895 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A678E4101BD51068004BD895 /* Main.storyboard */; };
 		A678E4141BD51068004BD895 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A678E4131BD51068004BD895 /* Assets.xcassets */; };
 		A678E4171BD51068004BD895 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A678E4151BD51068004BD895 /* LaunchScreen.storyboard */; };
@@ -100,6 +101,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A600FB9A1C3A204D007EF5AB /* UIView+MDRippleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+MDRippleView.h"; path = "Application/Common/View/UIView+MDRippleView.h"; sourceTree = "<group>"; };
+		A600FB9B1C3A204D007EF5AB /* UIView+MDRippleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+MDRippleView.m"; path = "Application/Common/View/UIView+MDRippleView.m"; sourceTree = "<group>"; };
 		A678E4041BD51068004BD895 /* DYJW.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DYJW.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A678E4111BD51068004BD895 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A678E4131BD51068004BD895 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -381,6 +384,8 @@
 				A687092D1C33D6FE007021A8 /* MDTextField.m */,
 				A687092E1C33D6FE007021A8 /* NavigationDrawer.h */,
 				A687092F1C33D6FE007021A8 /* NavigationDrawer.m */,
+				A600FB9A1C3A204D007EF5AB /* UIView+MDRippleView.h */,
+				A600FB9B1C3A204D007EF5AB /* UIView+MDRippleView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -869,6 +874,7 @@
 				A6870A421C3400A2007021A8 /* OCGumbo+Query.m in Sources */,
 				A68709371C33D6FE007021A8 /* NavigationDrawer.m in Sources */,
 				A6870A551C34049B007021A8 /* LiMingHuPanController.m in Sources */,
+				A600FB9C1C3A204D007EF5AB /* UIView+MDRippleView.m in Sources */,
 				A6870A301C3400A2007021A8 /* UIImageView+AFNetworking.m in Sources */,
 				A6870A2E1C3400A2007021A8 /* UIAlertView+AFNetworking.m in Sources */,
 				A6870A2A1C3400A2007021A8 /* AFURLResponseSerialization.m in Sources */,

@@ -8,6 +8,7 @@
 
 #import "FunctionCell.h"
 #import "MDColor.h"
+#import "UIView+MDRippleView.h"
 
 @implementation FunctionCell
 + (id)cellWithTableView:(UITableView *)tableView {
@@ -19,9 +20,10 @@
 
 - (void)awakeFromNib {
     // Initialization code
-    UIView *bg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 46)];
+    UIView *bg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width / 3 * 2, 46)];
     bg.backgroundColor = [MDColor lightBlue100];
     self.selectedBackgroundView = bg;
+    [self createRippleViewWithColor:[MDColor lightBlue50] andAlpha:0.5];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

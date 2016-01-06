@@ -76,6 +76,9 @@
     frame.origin.y = Padding;
     self.frame = frame;
     self.alpha = 1;
+    [self.usernameField endEditing:YES];
+    [self.passwordField endEditing:YES];
+    [self.verifycodeField endEditing:YES];
     [UIView animateWithDuration:Duration delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         CGRect frame = self.frame;
         frame.origin.y = frame.size.height;
@@ -116,7 +119,7 @@
 - (MDTextField *)usernameField {
     if (!_usernameField) {
         MDTextField *field = [[MDTextField alloc] initWithFrame:CGRectMake(Padding, 48, self.frame.size.width - Padding * 2, 48)];
-        [field setLabelText:@"用户名"];
+        field.placeholder = @"用户名";
         [self addSubview:field];
         _usernameField = field;
     }
@@ -126,7 +129,7 @@
 - (MDTextField *)passwordField {
     if (!_passwordField) {
         MDTextField *field = [[MDTextField alloc] initWithFrame:CGRectMake(Padding, 48 * 2, self.frame.size.width - Padding * 2, 48)];
-        [field setLabelText:@"密码"];
+        field.placeholder = @"密码";
         field.secureTextEntry = YES;
         [self addSubview:field];
         _passwordField = field;
@@ -137,7 +140,7 @@
 - (MDTextField *)verifycodeField {
     if (!_verifycodeField) {
         MDTextField *field = [[MDTextField alloc] initWithFrame:CGRectMake(Padding, 48 * 3, (self.frame.size.width - Padding * 2) / 2, 48)];
-        [field setLabelText:@"验证码"];
+        field.placeholder = @"验证码";
 //        field.
         [self addSubview:field];
         _verifycodeField = field;
