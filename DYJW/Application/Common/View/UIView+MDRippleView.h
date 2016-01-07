@@ -12,6 +12,7 @@
 - (void)createRippleView;
 - (void)createRippleViewWithColor:(UIColor *)color;
 - (void)createRippleViewWithColor:(UIColor *)color andAlpha:(CGFloat)alpha;
+- (void)rippleFinished;
 @end
 
 @interface UIButton (MDRippleView)

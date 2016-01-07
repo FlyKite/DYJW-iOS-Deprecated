@@ -15,6 +15,7 @@
 @property (nonatomic)CAAnimationGroup *groupAnimation;
 @property (nonatomic, assign)CGPoint startPoint;
 @property (nonatomic, assign)BOOL ripple;
+@property (nonatomic, assign)BOOL cancelRipple;
 @property (nonatomic, assign)UIColor *color;
 @property (nonatomic)CALayer *clipLayer;
 @end
@@ -24,6 +25,7 @@ static char groupAnimationKey;
 static char startPointXKey;
 static char startPointYKey;
 static char rippleKey;
+static char cancelRippleKey;
 static char colorKey;
 static char clipLayerKey;
 
@@ -35,6 +37,7 @@ static char clipLayerKey;
     if (!self.ripple) {
         self.color = color;
         self.ripple = YES;
+        self.cancelRipple = NO;
     }
 }
 - (void)createRippleViewWithColor:(UIColor *)color andAlpha:(CGFloat)alpha {
@@ -78,6 +81,11 @@ static char clipLayerKey;
     return [ripple boolValue];
 }
 
+- (BOOL)cancelRipple {
+    NSNumber *cancelRipple = objc_getAssociatedObject(self, &cancelRippleKey);
+    return [cancelRipple boolValue];
+}
+
 - (UIColor *)color {
     return objc_getAssociatedObject(self, &colorKey);
 }
@@ -103,6 +111,10 @@ static char clipLayerKey;
     objc_setAssociatedObject(self, &rippleKey, @(ripple), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
+- (void)setCancelRipple:(BOOL)cancelRipple {
+    objc_setAssociatedObject(self, &cancelRippleKey, @(cancelRipple), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 - (void)setColor:(UIColor *)color {
     objc_setAssociatedObject(self, &colorKey, color, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -113,21 +125,24 @@ static char clipLayerKey;
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
-    [self startRipple:touches];
+    self.cancelRipple = NO;
+    [self performSelector:@selector(startRipple:) withObject:touches afterDelay:0.1];
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [super touchesEnded:touches withEvent:event];
-    [self endRipple];
+    self.cancelRipple = NO;
+    [self performSelector:@selector(endRipple) withObject:nil afterDelay:0.1];
 }
 
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [super touchesCancelled:touches withEvent:event];
-    [self endRipple];
+    self.cancelRipple = YES;
+    [self performSelector:@selector(endRipple) withObject:nil afterDelay:0.1];
 }
 
 - (void)startRipple:(NSSet<UITouch *> *)touches {
-    if (!self.ripple) {
+    if (!self.ripple || self.cancelRipple) {
         return;
     }
     NSArray *array = [touches allObjects];
@@ -172,7 +187,6 @@ static char clipLayerKey;
     pathAnimation.toValue = [NSNumber numberWithFloat:1.0f];
     pathAnimation.fillMode = kCAFillModeForwards;
     pathAnimation.removedOnCompletion = NO;
-    pathAnimation.delegate = self;
     
     CABasicAnimation *alphaAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
     fromValue = offset > duration ? (duration * 2 - offset) / duration : 1.0;
@@ -186,10 +200,17 @@ static char clipLayerKey;
     groupAnimation.animations = @[moveAnimation, pathAnimation, alphaAnimation];
     groupAnimation.fillMode = kCAFillModeForwards;
     groupAnimation.removedOnCompletion = NO;
+    groupAnimation.delegate = self;
     groupAnimation.speed = speed;
     self.groupAnimation = groupAnimation;
     
     [self.rippleLayer addAnimation:groupAnimation forKey:@"groupAnimation"];
+}
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    if ([self respondsToSelector:@selector(rippleFinished)] && !flag) {
+        [self performSelector:@selector(rippleFinished) withObject:nil afterDelay:0.3];
+    }
 }
 @end
 

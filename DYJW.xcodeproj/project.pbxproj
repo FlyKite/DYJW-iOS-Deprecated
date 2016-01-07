@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		A600FB9C1C3A204D007EF5AB /* UIView+MDRippleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A600FB9B1C3A204D007EF5AB /* UIView+MDRippleView.m */; };
+		A600FB9F1C3CE81F007EF5AB /* MDDropdownList.m in Sources */ = {isa = PBXBuildFile; fileRef = A600FB9E1C3CE81F007EF5AB /* MDDropdownList.m */; };
+		A63832751C3E4A81001D9E7C /* ChengJiController.m in Sources */ = {isa = PBXBuildFile; fileRef = A63832731C3E4A81001D9E7C /* ChengJiController.m */; };
+		A63832791C3E4B59001D9E7C /* MDProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = A63832781C3E4B59001D9E7C /* MDProgressView.m */; };
 		A678E4121BD51068004BD895 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A678E4101BD51068004BD895 /* Main.storyboard */; };
 		A678E4141BD51068004BD895 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A678E4131BD51068004BD895 /* Assets.xcassets */; };
 		A678E4171BD51068004BD895 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A678E4151BD51068004BD895 /* LaunchScreen.storyboard */; };
@@ -103,6 +106,12 @@
 /* Begin PBXFileReference section */
 		A600FB9A1C3A204D007EF5AB /* UIView+MDRippleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+MDRippleView.h"; path = "Application/Common/View/UIView+MDRippleView.h"; sourceTree = "<group>"; };
 		A600FB9B1C3A204D007EF5AB /* UIView+MDRippleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+MDRippleView.m"; path = "Application/Common/View/UIView+MDRippleView.m"; sourceTree = "<group>"; };
+		A600FB9D1C3CE81F007EF5AB /* MDDropdownList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = MDDropdownList.h; path = Application/Common/View/MDDropdownList.h; sourceTree = "<group>"; };
+		A600FB9E1C3CE81F007EF5AB /* MDDropdownList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MDDropdownList.m; path = Application/Common/View/MDDropdownList.m; sourceTree = "<group>"; };
+		A63832721C3E4A81001D9E7C /* ChengJiController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChengJiController.h; path = JiaoWu/Controller/ChengJiController.h; sourceTree = "<group>"; };
+		A63832731C3E4A81001D9E7C /* ChengJiController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChengJiController.m; path = JiaoWu/Controller/ChengJiController.m; sourceTree = "<group>"; };
+		A63832771C3E4B59001D9E7C /* MDProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MDProgressView.h; path = Application/Common/View/MDProgressView.h; sourceTree = "<group>"; };
+		A63832781C3E4B59001D9E7C /* MDProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MDProgressView.m; path = Application/Common/View/MDProgressView.m; sourceTree = "<group>"; };
 		A678E4041BD51068004BD895 /* DYJW.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DYJW.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A678E4111BD51068004BD895 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A678E4131BD51068004BD895 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -386,6 +395,10 @@
 				A687092F1C33D6FE007021A8 /* NavigationDrawer.m */,
 				A600FB9A1C3A204D007EF5AB /* UIView+MDRippleView.h */,
 				A600FB9B1C3A204D007EF5AB /* UIView+MDRippleView.m */,
+				A600FB9D1C3CE81F007EF5AB /* MDDropdownList.h */,
+				A600FB9E1C3CE81F007EF5AB /* MDDropdownList.m */,
+				A63832771C3E4B59001D9E7C /* MDProgressView.h */,
+				A63832781C3E4B59001D9E7C /* MDProgressView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -686,6 +699,8 @@
 			children = (
 				A68708E61C33D44B007021A8 /* JiaoWuController.h */,
 				A68708E71C33D44B007021A8 /* JiaoWuController.m */,
+				A63832721C3E4A81001D9E7C /* ChengJiController.h */,
+				A63832731C3E4A81001D9E7C /* ChengJiController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -832,6 +847,7 @@
 				A68708E81C33D44B007021A8 /* JiaoWuController.m in Sources */,
 				A687093A1C33D71B007021A8 /* MDColor.m in Sources */,
 				A68709331C33D6FE007021A8 /* MDAlertView.m in Sources */,
+				A63832791C3E4B59001D9E7C /* MDProgressView.m in Sources */,
 				A6870A351C3400A2007021A8 /* attribute.c in Sources */,
 				A6870A331C3400A2007021A8 /* UIWebView+AFNetworking.m in Sources */,
 				A68709351C33D6FE007021A8 /* MDFloatButton.m in Sources */,
@@ -854,6 +870,7 @@
 				A6870A2F1C3400A2007021A8 /* UIButton+AFNetworking.m in Sources */,
 				A6870A291C3400A2007021A8 /* AFURLRequestSerialization.m in Sources */,
 				A68709081C33D5B3007021A8 /* TabView.m in Sources */,
+				A63832751C3E4A81001D9E7C /* ChengJiController.m in Sources */,
 				A6870A381C3400A2007021A8 /* error.c in Sources */,
 				A68709361C33D6FE007021A8 /* MDTextField.m in Sources */,
 				A687091F1C33D6E1007021A8 /* ToolbarController.m in Sources */,
@@ -864,6 +881,7 @@
 				A68708EB1C33D461007021A8 /* LoginView.m in Sources */,
 				A6870A3E1C3400A2007021A8 /* tokenizer.c in Sources */,
 				A68709071C33D5B3007021A8 /* NewsList.m in Sources */,
+				A600FB9F1C3CE81F007EF5AB /* MDDropdownList.m in Sources */,
 				A68709051C33D5B3007021A8 /* NewsCell.m in Sources */,
 				A68709111C33D656007021A8 /* MainCourseController.m in Sources */,
 				A6870A271C3400A2007021A8 /* AFSecurityPolicy.m in Sources */,

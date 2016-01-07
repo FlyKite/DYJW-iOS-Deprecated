@@ -12,6 +12,7 @@
 #import "Course.h"
 #import "UserInfo.h"
 #import "MDColor.h"
+#import "MDDropdownList.h"
 
 @interface MainCourseController ()
 @property (nonatomic, weak)UILabel *noCourseLabel;
@@ -37,6 +38,14 @@
             self.noCourseLabel.hidden = NO;
         }
     }
+//    [self test];
+}
+
+#warning test
+- (void)test {
+    MDDropdownList *dropdownList = [[MDDropdownList alloc] initWithFrame:CGRectMake(100, 30, 82, 48)];
+    dropdownList.data = @[@"UK", @"CN", @"JP", @"US", @"AU", @"CA", @"HK"];
+    [self.view addSubview:dropdownList];
 }
 
 - (void)didReceiveMemoryWarning {
