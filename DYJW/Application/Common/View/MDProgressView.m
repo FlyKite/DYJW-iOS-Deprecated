@@ -7,6 +7,11 @@
 //
 
 #import "MDProgressView.h"
+#import "MDColor.h"
+
+@interface MDProgressView ()
+@property (nonatomic, weak)CALayer *backMaskLayer;
+@end
 
 @implementation MDProgressView
 + (id)progressViewWithStyle:(MDProgressViewStyle)style {
@@ -26,6 +31,18 @@
     }
     return self;
 }
+
+- (CALayer *)backMaskLayer {
+    if (!_backMaskLayer) {
+        CALayer *layer = [[CALayer alloc] init];
+        layer.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+        layer.cornerRadius = self.frame.size.width / 2;
+        layer.shadowColor = [[MDColor grey500] colorWithAlphaComponent:0.5].CGColor;
+        _backMaskLayer = layer;
+    }
+    return _backMaskLayer;
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

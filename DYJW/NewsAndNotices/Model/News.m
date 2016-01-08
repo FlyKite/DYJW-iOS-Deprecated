@@ -7,6 +7,7 @@
 //
 
 #import "News.h"
+#import <UIKit/UIKit.h>
 #import "AFNetworking.h"
 #import "StringBodyRequestSerialization.h"
 #import "OCGumbo+Query.h"
@@ -53,14 +54,55 @@
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager GET:url parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
-        NSLog(@"%@", responseObject);
         NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
         NSString *html = [[NSString alloc] initWithData:responseObject encoding:enc];
+        
         OCGumboDocument *doc = [[OCGumboDocument alloc] initWithHTMLString:html];
-        NSString *xw = doc.Query(@"div.mainframe_1_1_3").first().html();
+//        NSString *xw = doc.Query(@"div.mainframe_1_1_3").first().html();
 //        xw = [NSString stringWithFormat:@"<link rel=\"stylesheet\" id=\"cssLink\" href=\"http://news.nepu.edu.cn/style/news.css\" type=\"text/css\" media=\"all\">%@", xw];
-//        NSString *xwcon = doc.Query(@"div.xwcon").description;
-//        NSString *title = doc.Query(@"div.title h3").description;
+        NSString *xwcon = doc.Query(@"div.xwcon").first().html();
+        NSString *title = doc.Query(@"div.title").first().html();
+        NSString *xw = [NSString stringWithFormat:
+                        @"<html>"
+                        "<head>"
+                        "<style>"
+                        "body {"
+                        "   margin: 0px;"
+                        "   font-family: 微软雅黑;"
+                        "   background: #efefef;"
+                        "}"
+                        "img {"
+                        "   box-shadow: 0px 2px 5px #aaaaaa;"
+                        "}"
+                        ".main {"
+                        "   margin-top: 52px;"
+                        "   padding: 8px;"
+                        "}"
+                        "</style>"
+                        "</head>"
+                        "<body>"
+                        "<div class=\"main\" style=\"margin-top:0px;\">%@</div>"
+                        "<hr/>"
+                        "<div style=\"padding-left:10px;padding-right:10px;\">"
+                        "%@"
+                        "</div>"
+                        "<script type=\"text/javascript\">"
+                        "function ResizeImages() { "
+                        "   var myimg, oldwidth;"
+                        "   var maxwidth = %d.0;"
+                        "   for(i=0;i <document.images.length;i++){"
+                        "       myimg = document.images[i];"
+                        "       if(myimg.width > maxwidth){"
+                        "           oldwidth = myimg.width;"
+                        "           myimg.width = maxwidth;"
+                        "           myimg.height = myimg.height * maxwidth / oldwidth;"
+                        "       }"
+                        "   }"
+                        "}"
+                        "ResizeImages();"
+                        "</script>"
+                        "</body>"
+                        "</html>", title, xwcon, (int)[UIScreen mainScreen].bounds.size.width - 20];
 //        NSString *puber = doc.Query(@"div.title h4 span.puber").description;
 //        NSString *pubtime = doc.Query(@"div.title h4 span.pubtime").description;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"NEWS_CONTENT" object:xw];

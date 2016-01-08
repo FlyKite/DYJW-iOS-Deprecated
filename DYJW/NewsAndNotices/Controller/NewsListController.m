@@ -32,6 +32,7 @@
         self.tab.data = @[@"通知公告", @"新闻动态", @"机构设置", @"办事指南", @"规章制度", @"教学建设", @"资料下载", @"信息发布", @"高教视窗"];
         self.pathArray = @[@"350312.html", @"350309.html", @"350302.html", @"350304.html", @"350303.html", @"350316.html", @"350305.html", @"350307.html", @"350317.html"];
     }
+    self.automaticallyAdjustsScrollViewInsets = NO;
     [self contentView];
     [self newsListWithPage:1];
 }
@@ -91,6 +92,10 @@
 }
 
 - (void)newsClicked:(NSString *)url {
+    [self performSelector:@selector(viewNews:) withObject:url afterDelay:0.3];
+}
+
+- (void)viewNews:(NSString *)url {
     NewsController *controller = [[NewsController alloc] init];
     controller.url = url;
     [self.navigationController pushViewController:controller animated:YES];

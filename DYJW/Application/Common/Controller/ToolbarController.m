@@ -69,7 +69,20 @@
     [self.view addSubview:contentViewContainer];
     self.contentViewContainer = contentViewContainer;
     
+    [self.contentViewContainer addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionOld context:nil];
+    
     [self setRootViewControllerWithIndex:0];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"frame"]) {
+        [self.contentViewContainer removeObserver:self forKeyPath:@"frame"];
+        CGRect frame = self.view.bounds;
+        frame.size.height -= StatusBarHeight + ToolbarHeight;
+        frame.origin.y = StatusBarHeight + ToolbarHeight;
+        self.contentViewContainer.frame = frame;
+        [self.contentViewContainer addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionOld context:nil];
+    }
 }
 
 // 设置抽屉及hamburger
@@ -95,6 +108,9 @@
 
 // 处理抽屉的滑动手势
 - (void)dealDrawerPan:(UIPanGestureRecognizer *)pan {
+    if (self.hamburger.state == HamburgerStatePopBack) {
+        return;
+    }
     if (pan.view == self.contentViewContainer && pan.state == UIGestureRecognizerStateBegan) {
         CGPoint point = [pan locationInView:pan.view];
         if (point.x < 30) {
@@ -140,6 +156,9 @@
         self.hamburger.state = HamburgerStateBack;
         self.drawer.stateValue = 1;
     } else {
+        if (self.hamburger.state == HamburgerStatePopBack) {
+            [self popViewControllerAnimated:YES];
+        }
         self.hamburger.state = HamburgerStateNormal;
         self.drawer.stateValue = 0;
     }
@@ -245,6 +264,15 @@
         [self.controllersDict setValue:vc forKey:[NSString stringWithFormat:@"%ld", index]];
     }
     return vc;
+}
+
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    [super pushViewController:viewController animated:animated];
+    self.hamburger.state = HamburgerStatePopBack;
+}
+
+- (UIViewController *)popViewControllerAnimated:(BOOL)animated {
+    return [super popViewControllerAnimated:animated];
 }
 
 - (NSMutableDictionary *)controllersDict {

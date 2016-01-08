@@ -45,20 +45,21 @@
     if ([notification.object isEqualToString:@"SUCCESS"]) {
         [self.loginView hide];
         [self.systemPanel show];
-    } else if ([notification.object isEqualToString:@"ACCOUNT_ERROR"]) {
-        
     } else if ([notification.object isEqualToString:@"NET_ERROR"]) {
-        
+        self.loginView.errorLabel.text = @"登录失败，请重试";
     } else if ([notification.object isEqualToString:@"LOGOUT"]) {
         [self.loginView show];
         [self.systemPanel hide];
+    } else {
+        self.loginView.errorLabel.text = notification.object;
     }
 }
 
 - (void)checkAccount {
     UserInfo *loginUser = [UserInfo userInfo];
-    if (loginUser.username && loginUser.logintime != 0) {
+    if (loginUser.name) {
         // 已经登录过
+        self.loginView.hidden = YES;
         [self.systemPanel show];
 //        NSNumber *loginTime = loginUser[@"LOGINTIME"];
     } else {

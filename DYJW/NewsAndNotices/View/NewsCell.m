@@ -7,13 +7,16 @@
 //
 
 #import "NewsCell.h"
+#import "UIView+MDRippleView.h"
 
 @implementation NewsCell
 + (id)cellWithTableView:(UITableView *)tableView {
     NSString * className = NSStringFromClass([self class]);
     UINib * nib = [UINib nibWithNibName:className bundle:nil];
     [tableView registerNib:nib forCellReuseIdentifier:className];
-    return [tableView dequeueReusableCellWithIdentifier:className];
+    NewsCell *cell = [tableView dequeueReusableCellWithIdentifier:className];
+    [cell createRippleView];
+    return cell;
 }
 - (void)setData:(NSDictionary *)data {
     self.selectionStyle = UITableViewCellSelectionStyleNone;

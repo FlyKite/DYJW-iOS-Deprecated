@@ -174,7 +174,7 @@
         UIView *view = [[UIView alloc] initWithFrame:Window.bounds];
         UIButton *maskButton = [UIButton buttonWithType:UIButtonTypeCustom];
         maskButton.frame = Window.bounds;
-        [maskButton addTarget:self action:@selector(hideList) forControlEvents:UIControlEventTouchUpInside];
+        [maskButton addTarget:self action:@selector(hideList) forControlEvents:UIControlEventTouchDown];
         [view addSubview:maskButton];
         _screenView = view;
     }

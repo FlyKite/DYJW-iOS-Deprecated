@@ -191,6 +191,18 @@
     [UserInfo saveUsername:self.usernameField.text andPassword:self.passwordField.text andLoginTime:0];
 }
 
+- (UILabel *)errorLabel {
+    if (!_errorLabel) {
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(Padding, self.loginButton.frame.origin.y, self.loginButton.frame.origin.y - 2 * Padding, 36)];
+        label.textColor = [MDColor red500];
+        label.font = [UIFont systemFontOfSize:14];
+        label.numberOfLines = 2;
+        [self addSubview:label];
+        _errorLabel = label;
+    }
+    return _errorLabel;
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

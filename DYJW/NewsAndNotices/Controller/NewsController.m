@@ -19,17 +19,34 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
+    self.automaticallyAdjustsScrollViewInsets = NO;
     [News newsWithURL:self.url];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData:) name:[NSString stringWithFormat:@"NEWS_CONTENT"] object:nil];
 }
 
 - (void)refreshData:(NSNotification *)notification {
     [self.webView loadHTMLString:notification.object baseURL:[NSURL URLWithString:self.url]];
+//    [self.webView stringByEvaluatingJavaScriptFromString:
+//     @"var script = document.createElement('script');"
+//     "script.type = 'text/javascript';"
+//     "script.text = \"function ResizeImages() { "
+//     "var myimg,oldwidth;"
+//     "var maxwidth = 300.0;" // UIWebView中显示的图片宽度
+//     "for(i=0;i <document.images.length;i++){"
+//     "myimg = document.images[i];"
+//     "if(myimg.width > maxwidth){"
+//     "oldwidth = myimg.width;"
+//     "myimg.width = maxwidth; alert(\"fds\");"
+//     "}"
+//     "}"
+//     "}\";"
+//     "document.getElementsByTagName('head')[0].appendChild(script);"];
+//    [self.webView stringByEvaluatingJavaScriptFromString:@"ResizeImages();"];
 }
 
 - (UIWebView *)webView {
     if (!_webView) {
-        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 76, self.view.bounds.size.width, self.view.bounds.size.height - 76)];
+        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height - 76)];
         [self.view addSubview:webView];
         _webView = webView;
     }

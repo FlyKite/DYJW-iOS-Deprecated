@@ -49,6 +49,9 @@
 }
 
 - (void)show {
+    UserInfo *user = [UserInfo userInfo];
+    self.welcomeLabel.text = [NSString stringWithFormat:@"%@，欢迎使用教务管理系统。", user.name];
+    
     CGRect frame = self.frame;
     frame.origin.y = -frame.size.height;
     self.frame = frame;

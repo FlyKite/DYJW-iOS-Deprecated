@@ -10,7 +10,8 @@
 
 typedef NS_ENUM(NSInteger, HamburgerState) {
     HamburgerStateNormal,
-    HamburgerStateBack
+    HamburgerStateBack,
+    HamburgerStatePopBack
 };
 typedef void(^onClickAction)(void);
 

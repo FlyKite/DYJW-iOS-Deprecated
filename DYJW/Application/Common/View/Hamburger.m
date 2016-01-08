@@ -51,8 +51,11 @@
 }
 
 - (void)setState:(HamburgerState)state {
-    if (_state != state) {
+    if (state != HamburgerStatePopBack && _state != state) {
         [self toggle];
+    } else if (state == HamburgerStatePopBack) {
+        self.stateValue = _state == HamburgerStateNormal ? 1 : 0;
+        _state = HamburgerStatePopBack;
     }
 }
 

@@ -73,7 +73,9 @@
         } else {
             // 账号密码错误
             NSLog(@"该账号不存在或密码错误！");
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGIN" object:@"ACCOUNT_ERROR"];
+            OCGumboDocument *doc = [[OCGumboDocument alloc] initWithHTMLString:html];
+            NSString *error = doc.Query(@"span#errorinfo").text();
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGIN" object:error];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 网络连接失败
