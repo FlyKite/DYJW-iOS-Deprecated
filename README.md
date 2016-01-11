@@ -1,5 +1,5 @@
 # ![Logo](https://raw.githubusercontent.com/FlyKite/DYJW-iOS/master/DYJW/Assets.xcassets/AppIcon.appiconset/appIcon%402x.png)东油教务 iOS App
-An iOS application for students of NEPU to use the JiaoWuGuanLi system on the iPhone.  
+An iOS application for students of NEPU to use the JiaoWuGuanLi system on iPhone.  
 iPhone上的东北石油大学教务管理系统。  
 
 APP站点：<http://dyjw.fly-kite.com/>   
@@ -17,7 +17,7 @@ APP站点：<http://dyjw.fly-kite.com/>
 捐赠
 ---
 东油教务使用阿里云服务器  
-如果觉得APP做得还不错，请投币至支付宝pk.kp@163.com  
+如果觉得APP做得还不错，请投币至支付宝DogeFlyKite@gmail.com  
 
 协议
 ---
