@@ -46,12 +46,12 @@
         [self.loginView hide];
         [self.systemPanel show];
     } else if ([notification.object isEqualToString:@"NET_ERROR"]) {
-        self.loginView.errorLabel.text = @"登录失败，请重试";
+        self.loginView.errorMsg = @"登录失败，请重试";
     } else if ([notification.object isEqualToString:@"LOGOUT"]) {
         [self.loginView show];
         [self.systemPanel hide];
     } else {
-        self.loginView.errorLabel.text = notification.object;
+        self.loginView.errorMsg = notification.object;
     }
 }
 

@@ -72,9 +72,9 @@
             } failure:nil];
         } else {
             // 账号密码错误
-            NSLog(@"该账号不存在或密码错误！");
             OCGumboDocument *doc = [[OCGumboDocument alloc] initWithHTMLString:html];
             NSString *error = doc.Query(@"span#errorinfo").text();
+            NSLog(@"该账号不存在或密码错误：%@", error);
             [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGIN" object:error];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

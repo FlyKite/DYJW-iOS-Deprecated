@@ -61,27 +61,32 @@
 //        NSString *xw = doc.Query(@"div.mainframe_1_1_3").first().html();
 //        xw = [NSString stringWithFormat:@"<link rel=\"stylesheet\" id=\"cssLink\" href=\"http://news.nepu.edu.cn/style/news.css\" type=\"text/css\" media=\"all\">%@", xw];
         NSString *xwcon = doc.Query(@"div.xwcon").first().html();
-        NSString *title = doc.Query(@"div.title").first().html();
+        NSString *title = doc.Query(@"div.title").first().Query(@"h3").first().text();
+        NSString *puber = doc.Query(@"div.title").first().Query(@"h4").first().Query(@"span.puber").first().text();
+        NSString *pubtime = doc.Query(@"div.title").first().Query(@"h4").first().Query(@"span.pubtime").first().text();
         NSString *xw = [NSString stringWithFormat:
                         @"<html>"
                         "<head>"
                         "<style>"
                         "body {"
                         "   margin: 0px;"
-                        "   font-family: 微软雅黑;"
                         "   background: #efefef;"
                         "}"
                         "img {"
                         "   box-shadow: 0px 2px 5px #aaaaaa;"
                         "}"
                         ".main {"
-                        "   margin-top: 52px;"
+                        "   margin-top: 8px;"
                         "   padding: 8px;"
                         "}"
                         "</style>"
                         "</head>"
                         "<body>"
-                        "<div class=\"main\" style=\"margin-top:0px;\">%@</div>"
+                        "<div class=\"main\">"
+                        "<span style=\"font-size:22px;\">%@</span><br /><br />"
+                        "<span style=\"font-size:15px;\">%@</span>&nbsp;&nbsp;"
+                        "<span style=\"font-size:15px;\">%@</span>"
+                        "</div>"
                         "<hr/>"
                         "<div style=\"padding-left:10px;padding-right:10px;\">"
                         "%@"
@@ -102,9 +107,7 @@
                         "ResizeImages();"
                         "</script>"
                         "</body>"
-                        "</html>", title, xwcon, (int)[UIScreen mainScreen].bounds.size.width - 20];
-//        NSString *puber = doc.Query(@"div.title h4 span.puber").description;
-//        NSString *pubtime = doc.Query(@"div.title h4 span.pubtime").description;
+                        "</html>", title, puber, pubtime, xwcon, (int)[UIScreen mainScreen].bounds.size.width - 20];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"NEWS_CONTENT" object:xw];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         

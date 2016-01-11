@@ -10,7 +10,7 @@
 
 typedef NS_ENUM(NSInteger, MDProgressViewStyle) {
     MDProgressViewStyleLoadingLarge,
-    MDProgressViewStyleLoadingMidium,
+    MDProgressViewStyleLoadingMedium,
     MDProgressViewStyleLoadingSmall,
     MDProgressViewStyleBar
 };
@@ -18,5 +18,7 @@ typedef NS_ENUM(NSInteger, MDProgressViewStyle) {
 @interface MDProgressView : UIView
 + (id)progressViewWithStyle:(MDProgressViewStyle)style;
 @property (nonatomic, assign, readonly)MDProgressViewStyle style;
+@property (nonatomic, strong)UIColor *color;
 @property (nonatomic, assign)BOOL showBackMask; // Set background mask of LoadingProgressView.
+@property (nonatomic, assign)BOOL showBackMaskShadow; // Set background mask shadow of LoadingProgressView.
 @end

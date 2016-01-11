@@ -16,7 +16,7 @@
 @property (nonatomic, weak)MDTextField *verifycodeField;
 @property (nonatomic, weak)MDFlatButton *loginButton;
 @property (nonatomic, weak)UIImageView *verifycodeImage;
-@property (nonatomic, weak)UILabel *errorLabel;
+@property (nonatomic, copy)NSString *errorMsg;
 - (void)show;
 - (void)hide;
 - (void)logout;

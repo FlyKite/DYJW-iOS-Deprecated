@@ -13,6 +13,7 @@
 #import "UserInfo.h"
 #import "MDColor.h"
 #import "MDDropdownList.h"
+#import "MDProgressView.h"
 
 @interface MainCourseController ()
 @property (nonatomic, weak)UILabel *noCourseLabel;
@@ -38,7 +39,7 @@
             self.noCourseLabel.hidden = NO;
         }
     }
-//    [self test];
+    [self test];
 }
 
 #warning test
@@ -46,6 +47,22 @@
     MDDropdownList *dropdownList = [[MDDropdownList alloc] initWithFrame:CGRectMake(100, 30, 82, 48)];
     dropdownList.data = @[@"UK", @"CN", @"JP", @"US", @"AU", @"CA", @"HK"];
     [self.view addSubview:dropdownList];
+    
+    MDProgressView *progress1 = [MDProgressView progressViewWithStyle:MDProgressViewStyleLoadingLarge];
+    progress1.frame = CGRectMake(80, 320, 0, 0);
+    progress1.showBackMask = YES;
+    [self.view addSubview:progress1];
+    
+    MDProgressView *progress2 = [MDProgressView progressViewWithStyle:MDProgressViewStyleLoadingMedium];
+    progress2.frame = CGRectMake(180, 320, 0, 0);
+    progress2.showBackMask = YES;
+//    progress2.color = [UIColor cyanColor];
+    [self.view addSubview:progress2];
+    
+    MDProgressView *progress3 = [MDProgressView progressViewWithStyle:MDProgressViewStyleLoadingSmall];
+    progress3.frame = CGRectMake(260, 320, 0, 0);
+    progress3.showBackMask = YES;
+    [self.view addSubview:progress3];
 }
 
 - (void)didReceiveMemoryWarning {

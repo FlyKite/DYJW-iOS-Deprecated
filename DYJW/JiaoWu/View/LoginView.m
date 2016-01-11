@@ -11,6 +11,7 @@
 #import "VerifyCode.h"
 #import "JiaoWu.h"
 #import "UserInfo.h"
+#import "MDProgressView.h"
 
 #define Padding 16
 #define Duration 0.5
@@ -18,6 +19,9 @@
 @interface LoginView ()
 @property (nonatomic, weak)UILabel *titleLabel;
 @property (nonatomic, assign)BOOL isLoading;
+@property (nonatomic, weak)MDProgressView *imageLoadingView;
+@property (nonatomic, weak)MDProgressView *loginLoadingView;
+@property (nonatomic, weak)UILabel *errorLabel;
 @end
 
 @implementation LoginView
@@ -36,7 +40,6 @@
     [self loginButton];
     [self verifycodeImage];
     self.isLoading = NO;
-    [self loadVerifyCode];
 }
 
 - (void)loadVerifyCode {
@@ -56,6 +59,10 @@
 }
 
 - (void)show {
+    [self loadVerifyCode];
+    self.loginButton.enabled = YES;
+    self.loginLoadingView.hidden = YES;
+    self.errorMsg = @"";
     CGRect frame = self.frame;
     frame.origin.y = -frame.size.height;
     self.frame = frame;
@@ -67,7 +74,6 @@
         self.frame = frame;
         self.alpha = 1;
     } completion:^(BOOL finished) {
-        
     }];
 }
 
@@ -96,6 +102,7 @@
     [self loadVerifyCode];
 }
 
+#pragma mark - Setters
 - (void)setVCImage:(UIImage *)image {
     self.verifycodeImage.image = image;
     self.isLoading = NO;
@@ -105,6 +112,21 @@
     self.verifycodeField.text = code;
 }
 
+- (void)setIsLoading:(BOOL)isLoading {
+    _isLoading = isLoading;
+    self.verifycodeImage.hidden = isLoading;
+    self.imageLoadingView.hidden = !isLoading;
+}
+
+- (void)setErrorMsg:(NSString *)errorMsg {
+    _errorMsg = errorMsg;
+    self.errorLabel.text = errorMsg;
+    self.loginButton.enabled = YES;
+    self.loginLoadingView.hidden = YES;
+    [self loadVerifyCode];
+}
+
+#pragma mark - Getters
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(Padding, 0, self.frame.size.width - Padding * 2, 48)];
@@ -165,10 +187,41 @@
     return _verifycodeImage;
 }
 
+- (MDProgressView *)imageLoadingView {
+    if (!_imageLoadingView) {
+        MDProgressView *progress = [MDProgressView progressViewWithStyle:MDProgressViewStyleLoadingSmall];
+        CGPoint center = self.verifycodeImage.center;
+        center.x -= 50;
+        progress.center = center;
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(progress.frame.size.width, 0, 100, progress.frame.size.height)];
+        label.text = @"正在加载...";
+        label.textColor = [MDColor grey500];
+        label.textAlignment = NSTextAlignmentCenter;
+        [progress addSubview:label];
+        [self addSubview:progress];
+        _imageLoadingView = progress;
+    }
+    return _imageLoadingView;
+}
+
+- (MDProgressView *)loginLoadingView {
+    if (!_loginLoadingView) {
+        MDProgressView *progress = [MDProgressView progressViewWithStyle:MDProgressViewStyleLoadingSmall];
+        CGPoint center = self.loginButton.center;
+        center.x -= self.loginButton.frame.size.width / 2 + progress.frame.size.width / 2;
+        progress.center = center;
+        [self addSubview:progress];
+        _loginLoadingView = progress;
+    }
+    return _loginLoadingView;
+}
+
 - (MDFlatButton *)loginButton {
     if (!_loginButton) {
         MDFlatButton *button = [MDFlatButton buttonWithType:UIButtonTypeCustom];
         [button setTitle:@"登录" forState:UIControlStateNormal];
+        [button setTitle:@"正在登录" forState:UIControlStateDisabled];
+        [button setTitleColor:[MDColor grey500] forState:UIControlStateDisabled];
         CGRect frame = button.frame;
         frame.origin.x = self.frame.size.width - Padding - frame.size.width;
         frame.origin.y = 48 * 4 + Padding * 2;
@@ -181,16 +234,6 @@
     return _loginButton;
 }
 
-- (void)loginClick {
-    [self saveUser];
-    JiaoWu *jiaowu = [[JiaoWu alloc] init];
-    [jiaowu loginWithVerifycode:self.verifycodeField.text];
-}
-
-- (void)saveUser {
-    [UserInfo saveUsername:self.usernameField.text andPassword:self.passwordField.text andLoginTime:0];
-}
-
 - (UILabel *)errorLabel {
     if (!_errorLabel) {
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(Padding, self.loginButton.frame.origin.y, self.loginButton.frame.origin.y - 2 * Padding, 36)];
@@ -201,6 +244,21 @@
         _errorLabel = label;
     }
     return _errorLabel;
+}
+
+#pragma  mark - Login button click
+- (void)loginClick {
+    [self saveUser];
+    JiaoWu *jiaowu = [[JiaoWu alloc] init];
+    [jiaowu loginWithVerifycode:self.verifycodeField.text];
+    self.loginButton.enabled = NO;
+    self.loginLoadingView.hidden = NO;
+    _errorMsg = @"";
+    self.errorLabel.text = @"";
+}
+
+- (void)saveUser {
+    [UserInfo saveUsername:self.usernameField.text andPassword:self.passwordField.text andLoginTime:0];
 }
 
 /*
