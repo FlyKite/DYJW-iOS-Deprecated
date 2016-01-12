@@ -17,6 +17,7 @@
 @implementation MDFlatButton
 + (instancetype)buttonWithType:(UIButtonType)buttonType {
     MDFlatButton *button = [super buttonWithType:buttonType];
+    [button setTitleColor:[MDColor lightBlue500] forState:UIControlStateNormal];
     [button createRippleView];
     return button;
 }
@@ -26,9 +27,8 @@
     self.layer.cornerRadius = 2;
     self.clipsToBounds = YES;
 }
-- (void) setTitle:(NSString *)title forState:(UIControlState)state {
+- (void)setTitle:(NSString *)title forState:(UIControlState)state {
     [super setTitle:title forState:state];
-    [self setTitleColor:[MDColor lightBlue500] forState:state];
     [self sizeToFit];
     CGRect frame = self.frame;
     frame.size.width += Padding * 2;

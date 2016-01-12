@@ -14,6 +14,7 @@
 #import "MDColor.h"
 #import "MDDropdownList.h"
 #import "MDProgressView.h"
+#import "MDAlertView.h"
 
 @interface MainCourseController ()
 @property (nonatomic, weak)UILabel *noCourseLabel;
@@ -63,6 +64,35 @@
     progress3.frame = CGRectMake(260, 320, 0, 0);
     progress3.showBackMask = YES;
     [self.view addSubview:progress3];
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+    button.frame = CGRectMake(100, 400, 100, 50);
+    [button setTitle:@"对话框" forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(showAlert) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button];
+    
+    UIButton *button2 = [UIButton buttonWithType:UIButtonTypeSystem];
+    button2.frame = CGRectMake(100, 450, 150, 50);
+    [button2 setTitle:@"带按钮的对话框" forState:UIControlStateNormal];
+    [button2 addTarget:self action:@selector(showButtonAlert) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button2];
+}
+
+- (void)showAlert {
+    MDAlertView *alertView = [MDAlertView alertViewWithStyle:MDAlertViewStyleDialog];
+    alertView.title = @"Just a test";
+    alertView.message = @"This is an alert view, I'm just doing test. I am a genius! I'm the most smart man on the world!";
+    [alertView show];
+}
+
+- (void)showButtonAlert {
+    MDAlertView *alertView = [MDAlertView alertViewWithStyle:MDAlertViewStyleDialog];
+    alertView.title = @"Just a test";
+    alertView.message = @"This is an alert view, I'm just doing test. I am a genius! I'm the most smart man on the world!";
+    alertView.canCancelTouchOutside = NO;
+    [alertView setNegativeButton:@"No" andAction:nil];
+    [alertView setPositiveButton:@"Yes, I know." andAction:nil];
+    [alertView show];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -72,14 +102,14 @@
 
 - (CGRect)frame {
     if (CGRectIsEmpty(_frame)) {
-        _frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 76);
+        _frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight - 76);
     }
     return _frame;
 }
 
 - (UILabel *)noCourseLabel {
     if (!_noCourseLabel) {
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ViewWidth(self), ViewHeight(self))];
         label.textAlignment = NSTextAlignmentCenter;
         label.numberOfLines = 0;
         label.text = @"还没有课程哦~\n快登录教务管理系统获取课程表吧~";

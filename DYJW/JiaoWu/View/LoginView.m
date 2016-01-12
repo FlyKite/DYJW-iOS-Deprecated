@@ -26,7 +26,7 @@
 
 @implementation LoginView
 - (void)willMoveToSuperview:(UIView *)newSuperview {
-    self.frame = CGRectMake(Padding, Padding, newSuperview.frame.size.width - 2 * Padding, 48 * 4 + 36 + Padding * 3);
+    self.frame = CGRectMake(Padding, Padding, ViewWidth(newSuperview) - 2 * Padding, 48 * 4 + 36 + Padding * 3);
     self.layer.cornerRadius = 2;
     self.layer.shadowColor = [MDColor grey500].CGColor;
     self.layer.shadowOpacity = 0.75;
@@ -129,7 +129,7 @@
 #pragma mark - Getters
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(Padding, 0, self.frame.size.width - Padding * 2, 48)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(Padding, 0, ViewWidth(self) - Padding * 2, 48)];
         label.textColor = [MDColor grey700];
         label.font = [UIFont boldSystemFontOfSize:20];
         [self addSubview:label];
@@ -140,7 +140,7 @@
 
 - (MDTextField *)usernameField {
     if (!_usernameField) {
-        MDTextField *field = [[MDTextField alloc] initWithFrame:CGRectMake(Padding, 48, self.frame.size.width - Padding * 2, 48)];
+        MDTextField *field = [[MDTextField alloc] initWithFrame:CGRectMake(Padding, 48, ViewWidth(self) - Padding * 2, 48)];
         field.placeholder = @"用户名";
         [self addSubview:field];
         _usernameField = field;
@@ -150,7 +150,7 @@
 
 - (MDTextField *)passwordField {
     if (!_passwordField) {
-        MDTextField *field = [[MDTextField alloc] initWithFrame:CGRectMake(Padding, 48 * 2, self.frame.size.width - Padding * 2, 48)];
+        MDTextField *field = [[MDTextField alloc] initWithFrame:CGRectMake(Padding, 48 * 2, ViewWidth(self) - Padding * 2, 48)];
         field.placeholder = @"密码";
         field.secureTextEntry = YES;
         [self addSubview:field];
@@ -161,7 +161,7 @@
 
 - (MDTextField *)verifycodeField {
     if (!_verifycodeField) {
-        MDTextField *field = [[MDTextField alloc] initWithFrame:CGRectMake(Padding, 48 * 3, (self.frame.size.width - Padding * 2) / 2, 48)];
+        MDTextField *field = [[MDTextField alloc] initWithFrame:CGRectMake(Padding, 48 * 3, (ViewWidth(self) - Padding * 2) / 2, 48)];
         field.placeholder = @"验证码";
 //        field.
         [self addSubview:field];
@@ -174,7 +174,7 @@
     if (!_verifycodeImage) {
         UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(0, 48 * 3 + 8, 90, 32)];
         CGPoint center = image.center;
-        center.x = self.frame.size.width / 4 * 3;
+        center.x = ViewWidth(self) / 4 * 3;
         image.center = center;
         image.backgroundColor = [MDColor grey500];
         image.image = [UIImage imageNamed:@"click_to_refresh"];
@@ -193,7 +193,7 @@
         CGPoint center = self.verifycodeImage.center;
         center.x -= 50;
         progress.center = center;
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(progress.frame.size.width, 0, 100, progress.frame.size.height)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(ViewWidth(progress), 0, 100, ViewHeight(progress))];
         label.text = @"正在加载...";
         label.textColor = [MDColor grey500];
         label.textAlignment = NSTextAlignmentCenter;
@@ -208,7 +208,7 @@
     if (!_loginLoadingView) {
         MDProgressView *progress = [MDProgressView progressViewWithStyle:MDProgressViewStyleLoadingSmall];
         CGPoint center = self.loginButton.center;
-        center.x -= self.loginButton.frame.size.width / 2 + progress.frame.size.width / 2;
+        center.x -= ViewWidth(self.loginButton) / 2 + ViewWidth(progress) / 2;
         progress.center = center;
         [self addSubview:progress];
         _loginLoadingView = progress;
@@ -223,7 +223,7 @@
         [button setTitle:@"正在登录" forState:UIControlStateDisabled];
         [button setTitleColor:[MDColor grey500] forState:UIControlStateDisabled];
         CGRect frame = button.frame;
-        frame.origin.x = self.frame.size.width - Padding - frame.size.width;
+        frame.origin.x = ViewWidth(self) - Padding - frame.size.width;
         frame.origin.y = 48 * 4 + Padding * 2;
         button.frame = frame;
         button.titleLabel.font = [UIFont boldSystemFontOfSize:16];
@@ -236,7 +236,7 @@
 
 - (UILabel *)errorLabel {
     if (!_errorLabel) {
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(Padding, self.loginButton.frame.origin.y, self.loginButton.frame.origin.y - 2 * Padding, 36)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(Padding, ViewY(self.loginButton), ViewY(self.loginButton) - 2 * Padding, 36)];
         label.textColor = [MDColor red500];
         label.font = [UIFont systemFontOfSize:14];
         label.numberOfLines = 2;

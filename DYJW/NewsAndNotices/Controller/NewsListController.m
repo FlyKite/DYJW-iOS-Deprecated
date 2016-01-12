@@ -39,7 +39,7 @@
 
 - (UIScrollView *)contentView {
     if (!_contentView) {
-        UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 36, self.view.frame.size.width, self.view.frame.size.height - 36 - 76)];
+        UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 36, ScreenWidth, ScreenHeight - 36 - 76)];
         scrollView.delegate = self;
         scrollView.bounces = NO;
         scrollView.pagingEnabled = YES;

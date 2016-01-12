@@ -22,7 +22,7 @@
     return button;
 }
 
-- (void) setFrame:(CGRect)frame {
+- (void)setFrame:(CGRect)frame {
     frame.size.height = Height;
     frame.size.width = frame.size.width > Width ? frame.size.width : Width;
     [super setFrame:frame];

@@ -7,9 +7,13 @@
 //
 
 #import "ChengJiController.h"
+#import "MDDropdownList.h"
+#import "MDColor.h"
+#import "JiaoWu.h"
 
-@interface ChengJiController ()
-
+@interface ChengJiController () <UITableViewDataSource, UITableViewDelegate>
+@property (nonatomic, weak)MDDropdownList *dropdownList;
+@property (nonatomic, weak)UITableView *tableView;
 @end
 
 @implementation ChengJiController
@@ -17,7 +21,43 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [self createView];
+    [self getXueqi];
+}
+
+- (void)createView {
+    self.view.backgroundColor = [MDColor grey50];
     
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, 80, 48)];
+    label.text = @"开课学期";
+    label.textColor = [MDColor grey800];
+    [self.view addSubview:label];
+    
+    MDDropdownList *dropdown = [[MDDropdownList alloc] initWithFrame:CGRectMake(96, 0, ScreenWidth - 96 - 16, 48)];
+    dropdown.data = @[@"2011-2012-1", @"2011-2012-2", @"2012-2013-1", @"2012-2013-2", @"2013-2014-1", @"2013-2014-2"];
+    [self.view addSubview:dropdown];
+    self.dropdownList = dropdown;
+    
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 48, ScreenWidth, ScreenHeight - 76) style:UITableViewStylePlain];
+    tableView.delegate = self;
+    tableView.dataSource = self;
+    [self.view addSubview:tableView];
+    self.tableView = tableView;
+}
+
+- (void)getXueqi {
+    JiaoWu *jiaowu = [JiaoWu jiaowu];
+    [jiaowu getXueqiList:^(NSArray *xueqiArray, NSString *bjbh) {
+        self.dropdownList.data = xueqiArray;
+    } addAllXueqi:YES];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 0;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return nil;
 }
 
 - (void)didReceiveMemoryWarning {

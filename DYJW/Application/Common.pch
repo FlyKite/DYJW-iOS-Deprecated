@@ -1,0 +1,47 @@
+//
+//  Common.pch
+//  DYJW
+//
+//  Created by 风筝 on 16/1/11.
+//  Copyright © 2016年 Doge Studio. All rights reserved.
+//
+#ifndef __IPHONE_3_0
+//#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
+//#ifndef Common_pch
+#define Common_pch
+
+#import "MDColor.h"
+
+#define StatusBarHeight 20
+#define ToolbarHeight 56
+
+#define AppDelegat [UIApplication sharedApplication].delegate
+#define Window [UIApplication sharedApplication].delegate.window
+
+#define ViewOrigin(view) view.frame.origin
+#define ViewX(view) view.frame.origin.x
+#define ViewY(view) view.frame.origin.y
+
+#define ViewCenter(view) view.center
+#define ViewCenterX(view) view.center.x
+#define ViewCenterY(view) view.center.y
+
+#define ViewSize(view) view.frame.size
+#define ViewWidth(view) view.frame.size.width
+#define ViewHeight(view) view.frame.size.height
+
+#define ScreenBounds [UIScreen mainScreen].bounds
+#define ScreenSize [UIScreen mainScreen].bounds.size
+#define ScreenWidth [UIScreen mainScreen].bounds.size.width
+#define ScreenHeight [UIScreen mainScreen].bounds.size.height
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#endif /* Common_pch */

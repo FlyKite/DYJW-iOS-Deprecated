@@ -85,6 +85,55 @@
     return true;
 }
 
+- (void)getXueqiList:(void (^)(NSArray *, NSString *))success addAllXueqi:(BOOL)allXueqi {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager POST:@"http://jwgl.nepu.edu.cn/tkglAction.do?method=kbxxXs" parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        NSString *html = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        OCGumboDocument *doc = [[OCGumboDocument alloc] initWithHTMLString:html];
+        NSArray *elms = doc.Query(@"#xnxqh").first().Query(@"option");
+        NSMutableArray *xueqiArray = [[NSMutableArray alloc] init];
+        for (OCGumboNode *node in elms) {
+            NSString *text = node.text();
+            [xueqiArray addObject:text];
+            if ([text isEqualToString:@"---请选择---"] && allXueqi) {
+                [xueqiArray addObject:@"全部学期"];
+            }
+        }
+        if (success) {
+            success(xueqiArray, nil);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        success(nil, nil);
+    }];
+//    public ArrayList<String> getXueqiList(boolean allXueqi) {
+//        log.appendLog("&#tstart;--------------获取学期列表及bjbh--------------&#tend;");
+//        try {
+//            con = Jsoup.connect("http://jwgl.nepu.edu.cn/tkglAction.do?method=kbxxXs")
+//            .timeout(6000).cookie("JSESSIONID", JSESSIONID);
+//            Document doc = con.get();
+//            log.appendLog(doc.select("body").toString());
+//            bjbh = doc.getElementsByAttributeValue("name", "bjbh").val();
+//            Element elm = doc.getElementById("xnxqh");
+//            ArrayList<String> ar = new ArrayList<>();
+//            for(Element el: elm.select("option")) {
+//                ar.add(el.html());
+//                if(el.html().equals("---请选择---") && allXueqi) {
+//                    ar.add("全部学期");
+//                }
+//            }
+//            return ar;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            log.appendLog("&#estart;===========================================");
+//            log.appendLog(e);
+//            return null;
+//        } finally {
+//            log.appendLog("&#cend;");
+//        }
+//    }
+}
+
 - (UserInfo *)user {
     if (!_user) {
         _user = [UserInfo userInfo];

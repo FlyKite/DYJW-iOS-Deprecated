@@ -11,11 +11,10 @@
 #import "MDColor.h"
 #import "UserInfo.h"
 #import "SystemPanel.h"
-#import <iAd/iAd.h>
+#import "ChengJiController.h"
 
-@interface JiaoWuController () <ADBannerViewDelegate>
+@interface JiaoWuController () <SystemPanelDelegate>
 @property (nonatomic, weak)LoginView *loginView;
-@property (nonatomic, strong)ADBannerView *bannerView;
 @property (nonatomic, weak)SystemPanel *systemPanel;
 @end
 
@@ -26,17 +25,6 @@
     // Do any additional setup after loading the view.
     [self checkAccount];
     self.view.backgroundColor = [MDColor grey50];
-//    if ([ADBannerView instancesRespondToSelector:@selector(initWithAdType:)]) {
-//        _bannerView = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
-//    }
-//    else {
-//        _bannerView = [[ADBannerView alloc] init];
-//    }
-//    self.bannerView.delegate = self;
-//    CGRect frame = self.bannerView.frame;
-//    frame.origin.y = self.view.frame.size.height - frame.size.height - 76;
-//    self.bannerView.frame = frame;
-//    [self.view addSubview:self.bannerView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess:) name:@"LOGIN" object:nil];
 }
@@ -82,10 +70,23 @@
 - (SystemPanel *)systemPanel {
     if (!_systemPanel) {
         SystemPanel *systemPanel = [[SystemPanel alloc] init];
+        systemPanel.delegate = self;
         [self.view addSubview:systemPanel];
         self.systemPanel = systemPanel;
     }
     return _systemPanel;
+}
+
+- (void)systemPanelButtonClick:(NSInteger)position {
+    UIViewController *vc;
+    switch (position) {
+        case 0:
+            vc = [[ChengJiController alloc] init];
+            break;
+        default:
+            return;
+    }
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

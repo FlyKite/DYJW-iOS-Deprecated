@@ -80,7 +80,6 @@
 		A6870A421C3400A2007021A8 /* OCGumbo+Query.m in Sources */ = {isa = PBXBuildFile; fileRef = A6870A201C3400A2007021A8 /* OCGumbo+Query.m */; };
 		A6870A431C3400A2007021A8 /* OCGumbo.m in Sources */ = {isa = PBXBuildFile; fileRef = A6870A221C3400A2007021A8 /* OCGumbo.m */; };
 		A6870A461C3400CF007021A8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6870A451C3400CF007021A8 /* ViewController.m */; };
-		A6870A481C3400F9007021A8 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A6870A471C3400F9007021A8 /* Info.plist */; };
 		A6870A4B1C34011E007021A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A6870A4A1C34011E007021A8 /* main.m */; };
 		A6870A551C34049B007021A8 /* LiMingHuPanController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6870A531C34049B007021A8 /* LiMingHuPanController.m */; };
 		A6870A561C34049B007021A8 /* LiMingHuPanController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A6870A541C34049B007021A8 /* LiMingHuPanController.xib */; };
@@ -261,6 +260,7 @@
 		A6870A521C34049B007021A8 /* LiMingHuPanController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiMingHuPanController.h; sourceTree = "<group>"; };
 		A6870A531C34049B007021A8 /* LiMingHuPanController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LiMingHuPanController.m; sourceTree = "<group>"; };
 		A6870A541C34049B007021A8 /* LiMingHuPanController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LiMingHuPanController.xib; sourceTree = "<group>"; };
+		A6A68E181C43AEEF008703C4 /* Common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Common.pch; path = Application/Common.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -361,6 +361,7 @@
 				A678E4131BD51068004BD895 /* Assets.xcassets */,
 				A678E4151BD51068004BD895 /* LaunchScreen.storyboard */,
 				A6870A471C3400F9007021A8 /* Info.plist */,
+				A6A68E181C43AEEF008703C4 /* Common.pch */,
 				A6870A491C34011E007021A8 /* Supporting Files */,
 			);
 			name = Application;
@@ -767,7 +768,7 @@
 		A678E3FC1BD51068004BD895 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Doge Studio";
 				TargetAttributes = {
 					A678E4031BD51068004BD895 = {
@@ -809,7 +810,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A6870A481C3400F9007021A8 /* Info.plist in Resources */,
 				A678E4171BD51068004BD895 /* LaunchScreen.storyboard in Resources */,
 				A678E4141BD51068004BD895 /* Assets.xcassets in Resources */,
 				A68709061C33D5B3007021A8 /* NewsCell.xib in Resources */,
@@ -1050,6 +1050,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = DYJW/Application/Common.pch;
 				INFOPLIST_FILE = "$(SRCROOT)/DYJW/Application/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.doge.von.DYJW;
@@ -1065,6 +1067,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = DYJW/Application/Common.pch;
 				INFOPLIST_FILE = "$(SRCROOT)/DYJW/Application/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.doge.von.DYJW;

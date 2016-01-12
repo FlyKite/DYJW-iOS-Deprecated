@@ -6,13 +6,25 @@
 //  Copyright © 2015年 Doge Studio. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "MDFlatButton.h"
+#import <UIKit/UIKit.h>
 
-@interface MDAlertView : NSObject
+typedef NS_ENUM(NSUInteger, MDAlertViewStyle) {
+    MDAlertViewStyleLoading,
+    MDAlertViewStyleProgress,
+    MDAlertViewStyleDialog,
+    MDAlertViewStyleCustom
+};
+
+@interface MDAlertView : UIView
+@property (nonatomic, assign)MDAlertViewStyle style;
++ (instancetype)alertViewWithStyle:(MDAlertViewStyle)type;
+
+@property (nonatomic, assign)CGSize alertSize;  // This property only effects when style is custom.
 @property (nonatomic, copy)NSString *title;
-@property (nonatomic, weak)UIView *contentView;
-@property (nonatomic, weak)MDFlatButton *positiveButton;
-@property (nonatomic, weak)MDFlatButton *negativeButton;
-@property (nonatomic, weak)MDFlatButton *leftButton;
+@property (nonatomic, copy)NSString *message;
+@property (nonatomic, assign)BOOL canCancelTouchOutside;    // Default value is YES. The MDAlertView will not dismiss when you click the area outside the MDAlertView if value is NO.
+- (void)setPositiveButton:(NSString *)text andAction:(void(^)(void))positiveAction;
+- (void)setNegativeButton:(NSString *)text andAction:(void(^)(void))negativeAction;
+- (void)show;
+- (void)dismiss;
 @end

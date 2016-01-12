@@ -11,4 +11,5 @@
 @interface JiaoWu : NSObject
 + (id)jiaowu;
 - (BOOL)loginWithVerifycode:(NSString *)verifycode;
+- (void)getXueqiList:(void(^)(NSArray *xueqiArray, NSString *bjbh))success addAllXueqi:(BOOL)allXueqi;
 @end

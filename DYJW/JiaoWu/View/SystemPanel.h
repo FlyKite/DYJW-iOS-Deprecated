@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SystemPanel : UIView
+@protocol SystemPanelDelegate <NSObject>
+- (void)systemPanelButtonClick:(NSInteger)position;
+@end
 
+@interface SystemPanel : UIView
+@property (nonatomic, assign)id<SystemPanelDelegate> delegate;
 - (void)show;
 - (void)hide;
 @end
