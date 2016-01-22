@@ -16,7 +16,7 @@ APP站点：<http://dyjw.fly-kite.com/>
 
 捐赠
 ---
-东油教务使用阿里云服务器  
+东油教务使用阿里云服务器，以及发布到App Store需要支付开发者账号费用  
 如果觉得APP做得还不错，请投币至支付宝DogeFlyKite@gmail.com  
 
 协议
