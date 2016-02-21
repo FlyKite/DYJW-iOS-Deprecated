@@ -16,10 +16,7 @@
 }
 @property (nonatomic, weak)CALayer *backMaskLayer;
 @property (nonatomic, weak)CAShapeLayer *refreshLayer;
-@property (nonatomic, weak)CAShapeLayer *refreshTransLayer;
-@property (nonatomic, weak)CAShapeLayer *refreshWhiteLayer;
 @property (nonatomic, strong)CAKeyframeAnimation *refreshAnimation;
-@property (nonatomic, strong)CAKeyframeAnimation *refreshTransAnimation;
 @property (nonatomic, strong)CAKeyframeAnimation *endRefreshAnimation;
 @end
 
@@ -73,7 +70,6 @@
         
     } else {
         self.refreshLayer.strokeColor = color.CGColor;
-        self.refreshTransLayer.strokeColor = color.CGColor;
     }
     _color = color;
 }
@@ -103,40 +99,15 @@
         layer.strokeColor = self.color.CGColor;
         layer.fillColor = [UIColor clearColor].CGColor;
         
-        CABasicAnimation *rotation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-        rotation.duration = 2;
-        rotation.fromValue = @(0);
-        rotation.toValue = @(M_PI * 2);
-        rotation.repeatCount = MAXFLOAT;
-        [layer addAnimation:rotation forKey:@"transform.rotation.z"];
+        CGPoint center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2);
+        UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:center
+                                                            radius:_radius
+                                                        startAngle:0
+                                                          endAngle:10 * M_PI
+                                                         clockwise:YES];
+        layer.path = path.CGPath;
     }
     return _refreshLayer;
-}
-
-- (CAShapeLayer *)refreshTransLayer {
-    if (!_refreshTransLayer) {
-        CAShapeLayer *layer = [[CAShapeLayer alloc] init];
-        layer.frame = self.bounds;
-        [self.refreshLayer addSublayer:layer];
-        _refreshTransLayer = layer;
-        layer.lineWidth = _lineWidth;
-        layer.strokeColor = self.color.CGColor;
-        layer.fillColor = [UIColor clearColor].CGColor;
-    }
-    return _refreshTransLayer;
-}
-
-- (CAShapeLayer *)refreshWhiteLayer {
-    if (!_refreshWhiteLayer) {
-        CAShapeLayer *layer = [[CAShapeLayer alloc] init];
-        layer.frame = self.bounds;
-        [self.refreshLayer addSublayer:layer];
-        _refreshWhiteLayer = layer;
-        layer.lineWidth = _lineWidth + 1;
-        layer.strokeColor = [MDColor whiteColor].CGColor;
-        layer.fillColor = [UIColor clearColor].CGColor;
-    }
-    return _refreshWhiteLayer;
 }
 
 - (void)setShowBackMask:(BOOL)showBackMask {
@@ -150,69 +121,47 @@
 }
 
 - (void)startAnimate {
-    CGPoint center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2);
-    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:center
-                                                        radius:_radius
-                                                    startAngle:_startAngle * M_PI
-                                                      endAngle:(_startAngle + 2) * M_PI
-                                                     clockwise:YES];
-    _startAngle -= 0.4;
-    _startAngle = _startAngle <= 0 ? _startAngle + 2 : _startAngle;
-    self.refreshLayer.path = path.CGPath;
-    self.refreshWhiteLayer.path = path.CGPath;
-    [self.refreshLayer addAnimation:self.refreshAnimation forKey:@"strokeEnd"];
-    [self.refreshWhiteLayer addAnimation:self.endRefreshAnimation forKey:@"strokeEnd"];
+    CABasicAnimation *rotation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotation.duration = 2;
+    rotation.fromValue = @(0);
+    rotation.toValue = @(M_PI * 2);
+    rotation.repeatCount = MAXFLOAT;
+    [self.refreshLayer addAnimation:rotation forKey:@"transform.rotation.z"];
     
-    [self performSelector:@selector(startTransAnimation) withObject:nil afterDelay:0.5];
-}
-
-- (void)startTransAnimation {
-    CGPoint center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2);
-    UIBezierPath *transPath = [UIBezierPath bezierPathWithArcCenter:center
-                                                             radius:_radius
-                                                         startAngle:_startAngle * M_PI
-                                                           endAngle:(_startAngle + 2) * M_PI
-                                                          clockwise:YES];
-    self.refreshTransLayer.path = transPath.CGPath;
-    [self.refreshTransLayer addAnimation:self.refreshTransAnimation forKey:@"strokeEnd"];
+    self.refreshAnimation.values = @[@0.02, @0.18, @0.18,
+                                     @0.34, @0.34, @0.50,
+                                     @0.50, @0.66, @0.66,
+                                     @0.82, @0.82];
+    self.endRefreshAnimation.values = @[@0.00, @0.00, @0.16,
+                                        @0.16, @0.32, @0.32,
+                                        @0.48, @0.48, @0.64,
+                                        @0.64, @0.80];
+    NSMutableArray *timingFunctions = [[NSMutableArray alloc] init];
+    for (int i = 0; i < 11; i++) {
+        [timingFunctions addObject:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+    }
+    self.refreshAnimation.timingFunctions = timingFunctions;
+    [self.refreshLayer addAnimation:self.refreshAnimation forKey:@"strokeEnd"];
+    [self.refreshLayer addAnimation:self.endRefreshAnimation forKey:@"strokeStart"];
 }
 
 - (CAKeyframeAnimation *)refreshAnimation {
     if (!_refreshAnimation) {
         CAKeyframeAnimation *refresh = [CAKeyframeAnimation animationWithKeyPath:@"strokeEnd"];
-        refresh.duration = 2;
-        refresh.values = @[@(0.1), @(0.9), @(0.9)];
+        refresh.duration = 10;
+        refresh.repeatCount = MAXFLOAT;
         _refreshAnimation = refresh;
     }
     return _refreshAnimation;
 }
-
-- (CAKeyframeAnimation *)refreshTransAnimation {
-    if (!_refreshTransAnimation) {
-        CAKeyframeAnimation *refresh = [CAKeyframeAnimation animationWithKeyPath:@"strokeEnd"];
-        refresh.duration = 2;
-        refresh.values = @[@(0), @(0), @(0), @(0.1), @(0.1)];
-        refresh.repeatCount = MAXFLOAT;
-        _refreshTransAnimation = refresh;
-    }
-    return _refreshTransAnimation;
-}
-
 - (CAKeyframeAnimation *)endRefreshAnimation {
     if (!_endRefreshAnimation) {
-        CAKeyframeAnimation *endRefresh = [CAKeyframeAnimation animationWithKeyPath:@"strokeEnd"];
-        endRefresh.duration = 2;
-        endRefresh.values = @[@(0.0), @(0.0), @(0.8)];
-        endRefresh.delegate = self;
+        CAKeyframeAnimation *endRefresh = [CAKeyframeAnimation animationWithKeyPath:@"strokeStart"];
+        endRefresh.duration = 10;
+        endRefresh.repeatCount = MAXFLOAT;
         _endRefreshAnimation = endRefresh;
     }
     return _endRefreshAnimation;
-}
-
-- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    if (flag) {
-        [self startAnimate];
-    }
 }
 
 @end

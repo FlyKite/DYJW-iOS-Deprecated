@@ -28,15 +28,16 @@
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
         [self createRippleView];
+        self.shownRows = 4;
     }
     return self;
 }
 
 - (void)setFrame:(CGRect)frame {
     frame.size.height = 48;
-    NSInteger shouldBeWidth = frame.size.width;
-    shouldBeWidth = shouldBeWidth / 48 * 48;
-    frame.size.width = frame.size.width > shouldBeWidth ? shouldBeWidth + 48 : shouldBeWidth;
+//    NSInteger shouldBeWidth = frame.size.width;
+//    shouldBeWidth = shouldBeWidth / 48 * 48;
+//    frame.size.width = frame.size.width > shouldBeWidth ? shouldBeWidth + 48 : shouldBeWidth;
     self.underlineLayer.frame = CGRectMake(0, 47, frame.size.width, 1);
     self.textLayer.frame = CGRectMake(2, 15, frame.size.width - 4, 18);
     self.triangleLayer.position = CGPointMake(frame.size.width - 12, 24);
@@ -59,7 +60,7 @@
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         CGRect frame = FrameInWindow;
         frame.origin.y -= 48;
-        frame.size.height = 48 * 4;
+        frame.size.height = 48 * (self.shownRows > self.data.count ? self.data.count : self.shownRows);
         self.tableView.frame = frame;
         self.tableShadowView.alpha = 1;
         self.tableShadowView.frame = frame;

@@ -45,7 +45,12 @@ static UserInfo *user;
 + (void)saveCookieWithUrl:(NSString *)url {
     NSString *cookiePath = [NSString stringWithFormat:@"%@/Documents/cookie.plist", NSHomeDirectory()];
     NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL: [NSURL URLWithString:url]];
-    [cookies writeToFile:cookiePath atomically:YES];
+    for (NSHTTPCookie *cookie in cookies) {
+        if ([cookie.name isEqualToString:@"JSESSIONID"]) {
+            NSDictionary *cookieDict = @{@"JSESSIONID" : cookie.value};
+            [cookieDict writeToFile:cookiePath atomically:YES];
+        }
+    }
 }
 
 + (void)saveName:(NSString *)name {
@@ -58,10 +63,14 @@ static UserInfo *user;
     }
 }
 
-+ (NSArray *)cookies {
++ (NSHTTPCookie *)cookie {
     NSString *cookiePath = [NSString stringWithFormat:@"%@/Documents/cookie.plist", NSHomeDirectory()];
-    NSArray *cookies = [NSArray arrayWithContentsOfFile:cookiePath];
-    return cookies;
+    NSDictionary *cookieDict = [NSDictionary dictionaryWithContentsOfFile:cookiePath];
+    if (!cookieDict) {
+        return nil;
+    }
+    NSDictionary *cookieProperties = @{NSHTTPCookieName : @"JSESSIONID", NSHTTPCookieValue : cookieDict[@"JSESSIONID"], NSHTTPCookieDomain : @"jwgl.nepu.edu.cn", NSHTTPCookiePath : @"/"};
+    return [NSHTTPCookie cookieWithProperties:cookieProperties];
 }
 
 + (void)clearUserInfo {
@@ -72,6 +81,7 @@ static UserInfo *user;
 + (void)clearCookies {
     NSString *cookiePath = [NSString stringWithFormat:@"%@/Documents/cookie.plist", NSHomeDirectory()];
     [[NSFileManager defaultManager] removeItemAtPath:cookiePath error:nil];
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] removeCookiesSinceDate:[NSDate dateWithTimeIntervalSince1970:0]];
 }
 
 - (id)init {

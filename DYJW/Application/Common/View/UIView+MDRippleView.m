@@ -29,6 +29,8 @@ static char cancelRippleKey;
 static char colorKey;
 static char clipLayerKey;
 
+static char rippleFinishActionKey;
+
 @implementation UIView (MDRippleView)
 - (void)createRippleView {
     [self createRippleViewWithColor:[[MDColor grey300] colorWithAlphaComponent:0.5]];
@@ -94,6 +96,10 @@ static char clipLayerKey;
     return objc_getAssociatedObject(self, &clipLayerKey);
 }
 
+- (void(^)(void))rippleFinishAction {
+    return objc_getAssociatedObject(self, &rippleFinishActionKey);
+}
+
 - (void)setRippleLayer:(CAShapeLayer *)rippleLayer {
     objc_setAssociatedObject(self, &rippleLayerKey, rippleLayer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -121,6 +127,10 @@ static char clipLayerKey;
 
 - (void)setClipLayer:(CALayer *)clipLayer {
     objc_setAssociatedObject(self, &clipLayerKey, clipLayer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)setRippleFinishAction:(void (^)(void))rippleFinishAction {
+    objc_setAssociatedObject(self, &rippleFinishActionKey, rippleFinishAction, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -210,6 +220,8 @@ static char clipLayerKey;
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
     if ([self respondsToSelector:@selector(rippleFinished)] && !flag) {
         [self performSelector:@selector(rippleFinished) withObject:nil afterDelay:0.3];
+    } else if(self.rippleFinishAction && !flag) {
+        self.rippleFinishAction();
     }
 }
 @end

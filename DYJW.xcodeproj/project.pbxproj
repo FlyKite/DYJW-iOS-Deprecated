@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A600FB9C1C3A204D007EF5AB /* UIView+MDRippleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A600FB9B1C3A204D007EF5AB /* UIView+MDRippleView.m */; };
 		A600FB9F1C3CE81F007EF5AB /* MDDropdownList.m in Sources */ = {isa = PBXBuildFile; fileRef = A600FB9E1C3CE81F007EF5AB /* MDDropdownList.m */; };
+		A61928021C79724A001859C1 /* Course.m in Sources */ = {isa = PBXBuildFile; fileRef = A61928011C79724A001859C1 /* Course.m */; };
 		A63832751C3E4A81001D9E7C /* ChengJiController.m in Sources */ = {isa = PBXBuildFile; fileRef = A63832731C3E4A81001D9E7C /* ChengJiController.m */; };
 		A63832791C3E4B59001D9E7C /* MDProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = A63832781C3E4B59001D9E7C /* MDProgressView.m */; };
 		A678E4121BD51068004BD895 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A678E4101BD51068004BD895 /* Main.storyboard */; };
@@ -16,6 +17,8 @@
 		A678E4171BD51068004BD895 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A678E4151BD51068004BD895 /* LaunchScreen.storyboard */; };
 		A678E4221BD51068004BD895 /* DYJWTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A678E4211BD51068004BD895 /* DYJWTests.m */; };
 		A678E42D1BD51068004BD895 /* DYJWUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = A678E42C1BD51068004BD895 /* DYJWUITests.m */; };
+		A67CFA2B1C6DE3CC0051F440 /* ChengJi.m in Sources */ = {isa = PBXBuildFile; fileRef = A67CFA2A1C6DE3CC0051F440 /* ChengJi.m */; };
+		A67CFA2F1C6DE6710051F440 /* ChengJiCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A67CFA2D1C6DE6710051F440 /* ChengJiCell.m */; };
 		A68708E81C33D44B007021A8 /* JiaoWuController.m in Sources */ = {isa = PBXBuildFile; fileRef = A68708E71C33D44B007021A8 /* JiaoWuController.m */; };
 		A68708EB1C33D461007021A8 /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = A68708EA1C33D461007021A8 /* LoginView.m */; };
 		A68708EE1C33D489007021A8 /* SystemPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = A68708ED1C33D489007021A8 /* SystemPanel.m */; };
@@ -33,7 +36,6 @@
 		A68709111C33D656007021A8 /* MainCourseController.m in Sources */ = {isa = PBXBuildFile; fileRef = A68709101C33D656007021A8 /* MainCourseController.m */; };
 		A68709161C33D664007021A8 /* CourseView.m in Sources */ = {isa = PBXBuildFile; fileRef = A68709131C33D664007021A8 /* CourseView.m */; };
 		A68709171C33D664007021A8 /* WeekDayView.m in Sources */ = {isa = PBXBuildFile; fileRef = A68709151C33D664007021A8 /* WeekDayView.m */; };
-		A687091A1C33D678007021A8 /* Course.m in Sources */ = {isa = PBXBuildFile; fileRef = A68709191C33D678007021A8 /* Course.m */; };
 		A687091F1C33D6E1007021A8 /* ToolbarController.m in Sources */ = {isa = PBXBuildFile; fileRef = A687091C1C33D6E1007021A8 /* ToolbarController.m */; };
 		A68709201C33D6E1007021A8 /* ToolbarSubViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A687091E1C33D6E1007021A8 /* ToolbarSubViewController.m */; };
 		A68709301C33D6FE007021A8 /* FunctionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A68709221C33D6FE007021A8 /* FunctionCell.m */; };
@@ -83,6 +85,10 @@
 		A6870A4B1C34011E007021A8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A6870A4A1C34011E007021A8 /* main.m */; };
 		A6870A551C34049B007021A8 /* LiMingHuPanController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6870A531C34049B007021A8 /* LiMingHuPanController.m */; };
 		A6870A561C34049B007021A8 /* LiMingHuPanController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A6870A541C34049B007021A8 /* LiMingHuPanController.xib */; };
+		A6C73CCF1C6204F7007E1155 /* VerifyAlertCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = A6C73CCE1C6204F7007E1155 /* VerifyAlertCustomView.m */; };
+		A6D449621C72C7DC00A18B4E /* BasicJiaoWuController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6D449611C72C7DC00A18B4E /* BasicJiaoWuController.m */; };
+		A6D449651C72FF6000A18B4E /* KeBiaoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6D449641C72FF6000A18B4E /* KeBiaoController.m */; };
+		A6D449681C7300E000A18B4E /* KeBiaoView.m in Sources */ = {isa = PBXBuildFile; fileRef = A6D449671C7300E000A18B4E /* KeBiaoView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +113,8 @@
 		A600FB9B1C3A204D007EF5AB /* UIView+MDRippleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+MDRippleView.m"; path = "Application/Common/View/UIView+MDRippleView.m"; sourceTree = "<group>"; };
 		A600FB9D1C3CE81F007EF5AB /* MDDropdownList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = MDDropdownList.h; path = Application/Common/View/MDDropdownList.h; sourceTree = "<group>"; };
 		A600FB9E1C3CE81F007EF5AB /* MDDropdownList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MDDropdownList.m; path = Application/Common/View/MDDropdownList.m; sourceTree = "<group>"; };
+		A61928001C79724A001859C1 /* Course.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Course.h; path = JiaoWu/Model/Course.h; sourceTree = "<group>"; };
+		A61928011C79724A001859C1 /* Course.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Course.m; path = JiaoWu/Model/Course.m; sourceTree = "<group>"; };
 		A63832721C3E4A81001D9E7C /* ChengJiController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChengJiController.h; path = JiaoWu/Controller/ChengJiController.h; sourceTree = "<group>"; };
 		A63832731C3E4A81001D9E7C /* ChengJiController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChengJiController.m; path = JiaoWu/Controller/ChengJiController.m; sourceTree = "<group>"; };
 		A63832771C3E4B59001D9E7C /* MDProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MDProgressView.h; path = Application/Common/View/MDProgressView.h; sourceTree = "<group>"; };
@@ -121,6 +129,10 @@
 		A678E4281BD51068004BD895 /* DYJWUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DYJWUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A678E42C1BD51068004BD895 /* DYJWUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DYJWUITests.m; sourceTree = "<group>"; };
 		A678E42E1BD51068004BD895 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A67CFA291C6DE3CC0051F440 /* ChengJi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChengJi.h; path = JiaoWu/Model/ChengJi.h; sourceTree = "<group>"; };
+		A67CFA2A1C6DE3CC0051F440 /* ChengJi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChengJi.m; path = JiaoWu/Model/ChengJi.m; sourceTree = "<group>"; };
+		A67CFA2C1C6DE6710051F440 /* ChengJiCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChengJiCell.h; path = JiaoWu/View/ChengJiCell.h; sourceTree = "<group>"; };
+		A67CFA2D1C6DE6710051F440 /* ChengJiCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChengJiCell.m; path = JiaoWu/View/ChengJiCell.m; sourceTree = "<group>"; };
 		A68708E61C33D44B007021A8 /* JiaoWuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JiaoWuController.h; path = JiaoWu/Controller/JiaoWuController.h; sourceTree = "<group>"; };
 		A68708E71C33D44B007021A8 /* JiaoWuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JiaoWuController.m; path = JiaoWu/Controller/JiaoWuController.m; sourceTree = "<group>"; };
 		A68708E91C33D461007021A8 /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginView.h; path = JiaoWu/View/LoginView.h; sourceTree = "<group>"; };
@@ -154,8 +166,6 @@
 		A68709131C33D664007021A8 /* CourseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CourseView.m; path = MainCourse/View/CourseView.m; sourceTree = "<group>"; };
 		A68709141C33D664007021A8 /* WeekDayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeekDayView.h; path = MainCourse/View/WeekDayView.h; sourceTree = "<group>"; };
 		A68709151C33D664007021A8 /* WeekDayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeekDayView.m; path = MainCourse/View/WeekDayView.m; sourceTree = "<group>"; };
-		A68709181C33D678007021A8 /* Course.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Course.h; path = MainCourse/Model/Course.h; sourceTree = "<group>"; };
-		A68709191C33D678007021A8 /* Course.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Course.m; path = MainCourse/Model/Course.m; sourceTree = "<group>"; };
 		A687091B1C33D6E1007021A8 /* ToolbarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ToolbarController.h; path = Application/Common/Controller/ToolbarController.h; sourceTree = "<group>"; };
 		A687091C1C33D6E1007021A8 /* ToolbarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ToolbarController.m; path = Application/Common/Controller/ToolbarController.m; sourceTree = "<group>"; };
 		A687091D1C33D6E1007021A8 /* ToolbarSubViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ToolbarSubViewController.h; path = Application/Common/Controller/ToolbarSubViewController.h; sourceTree = "<group>"; };
@@ -261,6 +271,14 @@
 		A6870A531C34049B007021A8 /* LiMingHuPanController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LiMingHuPanController.m; sourceTree = "<group>"; };
 		A6870A541C34049B007021A8 /* LiMingHuPanController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LiMingHuPanController.xib; sourceTree = "<group>"; };
 		A6A68E181C43AEEF008703C4 /* Common.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Common.pch; path = Application/Common.pch; sourceTree = "<group>"; };
+		A6C73CCD1C6204F7007E1155 /* VerifyAlertCustomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VerifyAlertCustomView.h; path = JiaoWu/View/VerifyAlertCustomView.h; sourceTree = "<group>"; };
+		A6C73CCE1C6204F7007E1155 /* VerifyAlertCustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VerifyAlertCustomView.m; path = JiaoWu/View/VerifyAlertCustomView.m; sourceTree = "<group>"; };
+		A6D449601C72C7DC00A18B4E /* BasicJiaoWuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BasicJiaoWuController.h; path = JiaoWu/Controller/BasicJiaoWuController.h; sourceTree = "<group>"; };
+		A6D449611C72C7DC00A18B4E /* BasicJiaoWuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BasicJiaoWuController.m; path = JiaoWu/Controller/BasicJiaoWuController.m; sourceTree = "<group>"; };
+		A6D449631C72FF6000A18B4E /* KeBiaoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KeBiaoController.h; path = JiaoWu/Controller/KeBiaoController.h; sourceTree = "<group>"; };
+		A6D449641C72FF6000A18B4E /* KeBiaoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KeBiaoController.m; path = JiaoWu/Controller/KeBiaoController.m; sourceTree = "<group>"; };
+		A6D449661C7300E000A18B4E /* KeBiaoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KeBiaoView.h; path = JiaoWu/View/KeBiaoView.h; sourceTree = "<group>"; };
+		A6D449671C7300E000A18B4E /* KeBiaoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KeBiaoView.m; path = JiaoWu/View/KeBiaoView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -568,8 +586,6 @@
 		A6C819DE1BE225620049AA61 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A68709181C33D678007021A8 /* Course.h */,
-				A68709191C33D678007021A8 /* Course.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -680,6 +696,10 @@
 				A68708F21C33D4B7007021A8 /* UserInfo.m */,
 				A68708F31C33D4B7007021A8 /* VerifyCode.h */,
 				A68708F41C33D4B7007021A8 /* VerifyCode.m */,
+				A67CFA291C6DE3CC0051F440 /* ChengJi.h */,
+				A67CFA2A1C6DE3CC0051F440 /* ChengJi.m */,
+				A61928001C79724A001859C1 /* Course.h */,
+				A61928011C79724A001859C1 /* Course.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -691,6 +711,12 @@
 				A68708EA1C33D461007021A8 /* LoginView.m */,
 				A68708EC1C33D489007021A8 /* SystemPanel.h */,
 				A68708ED1C33D489007021A8 /* SystemPanel.m */,
+				A6C73CCD1C6204F7007E1155 /* VerifyAlertCustomView.h */,
+				A6C73CCE1C6204F7007E1155 /* VerifyAlertCustomView.m */,
+				A67CFA2C1C6DE6710051F440 /* ChengJiCell.h */,
+				A67CFA2D1C6DE6710051F440 /* ChengJiCell.m */,
+				A6D449661C7300E000A18B4E /* KeBiaoView.h */,
+				A6D449671C7300E000A18B4E /* KeBiaoView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -702,6 +728,10 @@
 				A68708E71C33D44B007021A8 /* JiaoWuController.m */,
 				A63832721C3E4A81001D9E7C /* ChengJiController.h */,
 				A63832731C3E4A81001D9E7C /* ChengJiController.m */,
+				A6D449601C72C7DC00A18B4E /* BasicJiaoWuController.h */,
+				A6D449611C72C7DC00A18B4E /* BasicJiaoWuController.m */,
+				A6D449631C72FF6000A18B4E /* KeBiaoController.h */,
+				A6D449641C72FF6000A18B4E /* KeBiaoController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -846,11 +876,13 @@
 				A6870A321C3400A2007021A8 /* UIRefreshControl+AFNetworking.m in Sources */,
 				A68708E81C33D44B007021A8 /* JiaoWuController.m in Sources */,
 				A687093A1C33D71B007021A8 /* MDColor.m in Sources */,
+				A67CFA2F1C6DE6710051F440 /* ChengJiCell.m in Sources */,
 				A68709331C33D6FE007021A8 /* MDAlertView.m in Sources */,
 				A63832791C3E4B59001D9E7C /* MDProgressView.m in Sources */,
 				A6870A351C3400A2007021A8 /* attribute.c in Sources */,
 				A6870A331C3400A2007021A8 /* UIWebView+AFNetworking.m in Sources */,
 				A68709351C33D6FE007021A8 /* MDFloatButton.m in Sources */,
+				A6D449651C72FF6000A18B4E /* KeBiaoController.m in Sources */,
 				A6870A311C3400A2007021A8 /* UIProgressView+AFNetworking.m in Sources */,
 				A6870A3F1C3400A2007021A8 /* utf8.c in Sources */,
 				A6870A2C1C3400A2007021A8 /* AFNetworkActivityIndicatorManager.m in Sources */,
@@ -870,12 +902,13 @@
 				A6870A2F1C3400A2007021A8 /* UIButton+AFNetworking.m in Sources */,
 				A6870A291C3400A2007021A8 /* AFURLRequestSerialization.m in Sources */,
 				A68709081C33D5B3007021A8 /* TabView.m in Sources */,
+				A67CFA2B1C6DE3CC0051F440 /* ChengJi.m in Sources */,
 				A63832751C3E4A81001D9E7C /* ChengJiController.m in Sources */,
 				A6870A381C3400A2007021A8 /* error.c in Sources */,
 				A68709361C33D6FE007021A8 /* MDTextField.m in Sources */,
 				A687091F1C33D6E1007021A8 /* ToolbarController.m in Sources */,
 				A68708F61C33D4B7007021A8 /* UserInfo.m in Sources */,
-				A687091A1C33D678007021A8 /* Course.m in Sources */,
+				A6D449681C7300E000A18B4E /* KeBiaoView.m in Sources */,
 				A6870A391C3400A2007021A8 /* parser.c in Sources */,
 				A68709301C33D6FE007021A8 /* FunctionCell.m in Sources */,
 				A68708EB1C33D461007021A8 /* LoginView.m in Sources */,
@@ -884,6 +917,8 @@
 				A600FB9F1C3CE81F007EF5AB /* MDDropdownList.m in Sources */,
 				A68709051C33D5B3007021A8 /* NewsCell.m in Sources */,
 				A68709111C33D656007021A8 /* MainCourseController.m in Sources */,
+				A6C73CCF1C6204F7007E1155 /* VerifyAlertCustomView.m in Sources */,
+				A61928021C79724A001859C1 /* Course.m in Sources */,
 				A6870A271C3400A2007021A8 /* AFSecurityPolicy.m in Sources */,
 				A6870A2B1C3400A2007021A8 /* AFURLSessionManager.m in Sources */,
 				A68708EE1C33D489007021A8 /* SystemPanel.m in Sources */,
@@ -902,6 +937,7 @@
 				A6870A251C3400A2007021A8 /* AFHTTPSessionManager.m in Sources */,
 				A6870A411C3400A2007021A8 /* vector.c in Sources */,
 				A6870A261C3400A2007021A8 /* AFNetworkReachabilityManager.m in Sources */,
+				A6D449621C72C7DC00A18B4E /* BasicJiaoWuController.m in Sources */,
 				A687093D1C33D739007021A8 /* AppDelegate.m in Sources */,
 				A6870A231C3400A2007021A8 /* AFHTTPRequestOperation.m in Sources */,
 				A68708F71C33D4B7007021A8 /* VerifyCode.m in Sources */,
@@ -1053,6 +1089,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = DYJW/Application/Common.pch;
 				INFOPLIST_FILE = "$(SRCROOT)/DYJW/Application/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.doge.von.DYJW;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1070,6 +1107,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = DYJW/Application/Common.pch;
 				INFOPLIST_FILE = "$(SRCROOT)/DYJW/Application/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.doge.von.DYJW;
 				PRODUCT_NAME = "$(TARGET_NAME)";

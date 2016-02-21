@@ -16,5 +16,6 @@
 @property (nonatomic, strong)NSArray *data;
 @property (nonatomic, assign)NSInteger selectedIndex;
 @property (nonatomic, copy)NSString *selectedText;
+@property (nonatomic, assign)NSInteger shownRows;   // Default is 4
 @property (nonatomic, assign)id<MDDropdownListDelegate> delegate;
 @end

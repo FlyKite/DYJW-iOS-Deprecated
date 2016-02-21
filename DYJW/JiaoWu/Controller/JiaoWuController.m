@@ -12,6 +12,10 @@
 #import "UserInfo.h"
 #import "SystemPanel.h"
 #import "ChengJiController.h"
+#import "KeBiaoController.h"
+#import "MDAlertView.h"
+#import "VerifyAlertCustomView.h"
+#import "JiaoWu.h"
 
 @interface JiaoWuController () <SystemPanelDelegate>
 @property (nonatomic, weak)LoginView *loginView;
@@ -38,6 +42,8 @@
     } else if ([notification.object isEqualToString:@"LOGOUT"]) {
         [self.loginView show];
         [self.systemPanel hide];
+    } else if ([notification.object isEqualToString:@"RELOGIN"]) {
+        
     } else {
         self.loginView.errorMsg = notification.object;
     }
@@ -78,15 +84,55 @@
 }
 
 - (void)systemPanelButtonClick:(NSInteger)position {
+    // 进入前先检查登录状态
+    UserInfo *loginUser = [UserInfo userInfo];
+    NSTimeInterval timeElapsed = [[NSDate date] timeIntervalSince1970] - loginUser.logintime;
+    if (timeElapsed > 20 * 60) {
+        [self inputVerifyCode:nil withActionPosition:position];
+        return;
+    }
+    // 进入相应功能模块
     UIViewController *vc;
     switch (position) {
         case 0:
             vc = [[ChengJiController alloc] init];
             break;
+        case 1:
+            vc = [[KeBiaoController alloc] init];
+            break;
         default:
             return;
     }
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)inputVerifyCode:(NSString *)msg withActionPosition:(NSInteger)position {
+    [UserInfo clearCookies];
+    MDAlertView *alertView = [MDAlertView alertViewWithStyle:MDAlertViewStyleCustom];
+    alertView.title = @"请输入验证码";
+    VerifyAlertCustomView *customView = [VerifyAlertCustomView viewWithMessage:msg];
+    alertView.customView = customView;
+    alertView.canCancelTouchOutside = NO;
+    [alertView setPositiveButton:@"登录" andAction:^{
+        NSString *vcd = customView.verifycodeField.text;
+        if (vcd.length != 4) {
+            [self inputVerifyCode:@"请输入验证码" withActionPosition:position];
+        } else {
+            JiaoWu *jiaowu = [JiaoWu jiaowu];
+            MDAlertView *alertView = [MDAlertView alertViewWithStyle:MDAlertViewStyleLoading];
+            alertView.message = @"正在登录...";
+            [alertView show];
+            [jiaowu loginWithVerifycode:vcd success:^{
+                [alertView dismiss];
+                [self systemPanelButtonClick:position];
+            } failure:^(NSString *error) {
+                [alertView dismiss];
+                [self inputVerifyCode:error withActionPosition:position];
+            }];
+        }
+    }];
+    [alertView setNegativeButton:@"取消" andAction:nil];
+    [alertView show];
 }
 
 - (void)didReceiveMemoryWarning {

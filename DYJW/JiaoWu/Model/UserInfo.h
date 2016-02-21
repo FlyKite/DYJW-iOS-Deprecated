@@ -14,7 +14,7 @@
 + (void)updateLoginTime:(NSTimeInterval)loginTime;
 + (void)saveCookieWithUrl:(NSString *)url;
 + (void)saveName:(NSString *)name;
-+ (NSArray *)cookies;
++ (NSHTTPCookie *)cookie;
 + (void)clearUserInfo;
 + (void)clearCookies;
 @property (nonatomic, copy)NSString *username;

@@ -10,6 +10,7 @@
 #import "MDColor.h"
 #import "FunctionCell.h"
 #import "UserInfo.h"
+#import "MDAlertView.h"
 
 #define StatusBarHeight 20
 #define ToolbarHeight 56
@@ -156,13 +157,21 @@
 
 - (void)loginButtonClick {
     if ([self.loginButton.titleLabel.text isEqualToString:@"登录"]) {
+        [self.functionList selectRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionMiddle];
         [self.delegate changeFunction:2];
     } else {
-        [UserInfo clearUserInfo];
-        [UserInfo clearCookies];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGIN" object:@"LOGOUT"];
-        [self.loginButton setTitle:@"登录" forState:UIControlStateNormal];
-        self.usernameLabel.text = @"请登录教务管理系统";
+        MDAlertView *alertView  = [MDAlertView alertViewWithStyle:MDAlertViewStyleDialog];
+        alertView.title = @"注销";
+        alertView.message = @"确认注销当前账号？";
+        [alertView setPositiveButton:@"确定" andAction:^{
+            [UserInfo clearUserInfo];
+            [UserInfo clearCookies];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGIN" object:@"LOGOUT"];
+            [self.loginButton setTitle:@"登录" forState:UIControlStateNormal];
+            self.usernameLabel.text = @"请登录教务管理系统";
+        }];
+        [alertView setNegativeButton:@"取消" andAction:nil];
+        [alertView show];
     }
 }
 

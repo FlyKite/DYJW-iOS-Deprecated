@@ -23,6 +23,7 @@ typedef NS_ENUM(NSUInteger, MDAlertViewStyle) {
 @property (nonatomic, copy)NSString *title;
 @property (nonatomic, copy)NSString *message;
 @property (nonatomic, assign)BOOL canCancelTouchOutside;    // Default value is YES. The MDAlertView will not dismiss when you click the area outside the MDAlertView if value is NO.
+@property (nonatomic, strong)UIView *customView;    // This will only effects when style is custom.
 - (void)setPositiveButton:(NSString *)text andAction:(void(^)(void))positiveAction;
 - (void)setNegativeButton:(NSString *)text andAction:(void(^)(void))negativeAction;
 - (void)show;

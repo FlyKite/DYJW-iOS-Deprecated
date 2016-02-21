@@ -19,13 +19,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DYJW/News.m"
-            timestampString = "468480594.30381"
+            filePath = "DYJW/JiaoWu/Model/Course.m"
+            timestampString = "477736665.818426"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
-            landmarkName = "+newsWithURL:"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "-setRawText:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

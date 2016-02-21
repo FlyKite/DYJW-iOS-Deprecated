@@ -28,6 +28,7 @@
 - (void)willMoveToSuperview:(UIView *)newSuperview {
     self.frame = CGRectMake(Padding, Padding, ViewWidth(newSuperview) - 2 * Padding, 48 * 4 + 36 + Padding * 3);
     self.layer.cornerRadius = 2;
+    self.layer.shadowRadius = 2;
     self.layer.shadowColor = [MDColor grey500].CGColor;
     self.layer.shadowOpacity = 0.75;
     self.layer.shadowOffset = CGSizeMake(0, 2);
@@ -250,7 +251,7 @@
 - (void)loginClick {
     [self saveUser];
     JiaoWu *jiaowu = [[JiaoWu alloc] init];
-    [jiaowu loginWithVerifycode:self.verifycodeField.text];
+    [jiaowu loginWithVerifycode:self.verifycodeField.text success:nil failure:nil];
     self.loginButton.enabled = NO;
     self.loginLoadingView.hidden = NO;
     _errorMsg = @"";

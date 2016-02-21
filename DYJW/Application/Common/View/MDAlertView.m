@@ -9,16 +9,20 @@
 #import "MDAlertView.h"
 #import "NSString+Height.h"
 #import "MDFlatButton.h"
+#import "MDProgressView.h"
 
 @interface MDAlertView ()
 @property (nonatomic, weak)UIView *maskView;
 @property (nonatomic, weak)UIView *contentView;
 @property (nonatomic, weak)UILabel *titleLabel;
 @property (nonatomic, weak)UILabel *contentLabel;
+@property (nonatomic, weak)MDProgressView *loadingView;
+@property (nonatomic, weak)MDProgressView *progressView;
 @property (nonatomic, weak)MDFlatButton *positiveButton;
 @property (nonatomic, weak)MDFlatButton *negativeButton;
 @property (nonatomic, copy)void(^positiveAction)();
 @property (nonatomic, copy)void(^negativeAction)();
+@property (nonatomic, assign)BOOL shown;
 @end
 
 @implementation MDAlertView
@@ -68,12 +72,23 @@
     [self calcViewFrames];
 }
 
+- (void)setCustomView:(UIView *)customView {
+    if (_customView != customView) {
+        [_customView removeFromSuperview];
+    }
+    _customView = customView;
+    [self.contentView addSubview:customView];
+    [self calcViewFrames];
+}
+
 - (void)setPositiveButton:(NSString *)text andAction:(void (^)(void))positiveAction {
+    self.positiveAction = positiveAction;
     [self.positiveButton setTitle:text forState:UIControlStateNormal];
     [self calcViewFrames];
 }
 
 - (void)setNegativeButton:(NSString *)text andAction:(void (^)(void))negativeAction {
+    self.negativeAction = negativeAction;
     [self.negativeButton setTitle:text forState:UIControlStateNormal];
     [self calcViewFrames];
 }
@@ -127,6 +142,15 @@
     return _contentLabel;
 }
 
+- (MDProgressView *)loadingView {
+    if (!_loadingView) {
+        MDProgressView *loadingView = [MDProgressView progressViewWithStyle:MDProgressViewStyleLoadingMedium];
+        [self.contentView addSubview:loadingView];
+        _loadingView = loadingView;
+    }
+    return _loadingView;
+}
+
 - (MDFlatButton *)positiveButton {
     if (!_positiveButton) {
         MDFlatButton *button = [MDFlatButton buttonWithType:UIButtonTypeCustom];
@@ -152,6 +176,7 @@
 
 #pragma mark - Show and dismiss
 - (void)show {
+    self.shown = YES;
     [Window addSubview:self];
     [self calcViewFrames];
     [UIView animateWithDuration:0.3 animations:^{
@@ -168,6 +193,9 @@
 }
 
 - (void)calcViewFrames {
+    if (!self.shown) {
+        return;
+    }
     CGFloat contentViewWidth = ScreenWidth - 24 * 2;
     CGFloat labelWidth = contentViewWidth - 24 * 2;
     CGFloat labelX = 24;
@@ -176,9 +204,27 @@
     CGFloat titleHeight = [self.title heightWithFont:self.titleLabel.font withinWidth:labelWidth];
     self.titleLabel.frame = CGRectMake(labelX, titleY, labelWidth, titleHeight);
     
-    CGFloat contentY = titleY + titleHeight + 18;
-    CGFloat contentHeight = [self.message heightWithFont:self.contentLabel.font withinWidth:labelWidth];
-    self.contentLabel.frame = CGRectMake(labelX, contentY, labelWidth, contentHeight);
+    CGFloat contentY = titleY + titleHeight + (titleHeight == 0 ? 0 : 18);
+    CGFloat contentHeight;
+    if (self.style == MDAlertViewStyleCustom) {
+        contentHeight = self.customView.frame.size.height;
+        self.customView.frame = CGRectMake(labelX, contentY, self.customView.frame.size.width, contentHeight);
+        if (self.message) {
+            contentY += contentHeight;
+            contentHeight = [self.message heightWithFont:self.contentLabel.font withinWidth:labelWidth];
+            self.contentLabel.frame = CGRectMake(labelX, contentY, labelWidth, contentHeight);
+        }
+    } else {
+        if (self.style == MDAlertViewStyleLoading) {
+            contentHeight = [self.message heightWithFont:self.contentLabel.font withinWidth:labelWidth - 56];
+            self.contentLabel.frame = CGRectMake(64, contentY, labelWidth - 64, contentHeight);
+            CGRect f = CGRectMake(8, contentY + (contentHeight / 2 - 24), 0, 0);
+            self.loadingView.frame = f;
+        } else {
+            contentHeight = [self.message heightWithFont:self.contentLabel.font withinWidth:labelWidth];
+            self.contentLabel.frame = CGRectMake(labelX, contentY, labelWidth, contentHeight);
+        }
+    }
     
     CGFloat buttonY = contentY + contentHeight + 24;
     CGFloat buttonHeight = 36;
