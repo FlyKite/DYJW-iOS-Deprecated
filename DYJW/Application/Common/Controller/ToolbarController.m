@@ -232,6 +232,7 @@
     CGRect frame = self.view.bounds;
     frame.size.height -= StatusBarHeight + ToolbarHeight;
     rootViewController.view.frame = frame;
+    [rootViewController viewWillAppear:YES];
     [self.contentViewContainer addSubview:rootViewController.view];
     [rootViewController didMoveToParentViewController:self];
 }

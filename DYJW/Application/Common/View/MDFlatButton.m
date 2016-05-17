@@ -22,7 +22,6 @@
     return button;
 }
 - (void)setFrame:(CGRect)frame {
-    frame.size.height = Height;
     [super setFrame:frame];
     self.layer.cornerRadius = 2;
     self.clipsToBounds = YES;

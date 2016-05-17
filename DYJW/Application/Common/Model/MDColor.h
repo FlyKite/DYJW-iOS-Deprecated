@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface MDColor : UIColor
++ (UIColor *)rgbColor:(NSString *)rgbString;
 + (UIImage *)pureColorImageWithColor:(UIColor *)color andSize:(CGSize)size;
 // lightBlue
 + (UIColor *) red50;

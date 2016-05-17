@@ -21,6 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.view.backgroundColor = [MDColor grey50];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

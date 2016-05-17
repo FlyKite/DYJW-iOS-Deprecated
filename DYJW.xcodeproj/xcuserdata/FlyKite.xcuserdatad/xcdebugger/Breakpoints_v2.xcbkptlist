@@ -19,13 +19,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DYJW/JiaoWu/Model/Course.m"
-            timestampString = "477736665.818426"
+            filePath = "DYJW/LiMingHuPan/View/ItemCell.m"
+            timestampString = "485158475.522368"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
-            landmarkName = "-setRawText:"
+            startingLineNumber = "156"
+            endingLineNumber = "156"
+            landmarkName = "-setImageName:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

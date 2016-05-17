@@ -10,4 +10,5 @@
 
 @interface MDTextField : UITextField
 - (void)setUnderlineColorOnFocus:(UIColor *)color;
+@property (assign, nonatomic) BOOL hasPadding;
 @end

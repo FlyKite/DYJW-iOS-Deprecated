@@ -70,6 +70,6 @@
             term = 2;
         }
     }
-    return [NSString stringWithFormat:@"%ld_%ld_%ld", year, year + 1, term];
+    return [NSString stringWithFormat:@"%ld_%ld_%ld", (long)year, year + 1, (long)term];
 }
 @end

@@ -13,6 +13,9 @@
 #import "SystemPanel.h"
 #import "ChengJiController.h"
 #import "KeBiaoController.h"
+#import "ChongXiuController.h"
+#import "BuKaoController.h"
+#import "JiHuaController.h"
 #import "MDAlertView.h"
 #import "VerifyAlertCustomView.h"
 #import "JiaoWu.h"
@@ -99,6 +102,15 @@
             break;
         case 1:
             vc = [[KeBiaoController alloc] init];
+            break;
+        case 2:
+            vc = [[ChongXiuController alloc] init];
+            break;
+        case 3:
+            vc = [[BuKaoController alloc] init];
+            break;
+        case 4:
+            vc = [[JiHuaController alloc] init];
             break;
         default:
             return;

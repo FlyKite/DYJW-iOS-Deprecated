@@ -50,6 +50,7 @@ static char rippleFinishActionKey;
     CAShapeLayer *_rippleLayer = objc_getAssociatedObject(self, &rippleLayerKey);
     if (!_rippleLayer) {
         CALayer *layer = [CALayer layer];
+        layer.cornerRadius = self.layer.cornerRadius;
         layer.masksToBounds = YES;
         self.clipLayer = layer;
         

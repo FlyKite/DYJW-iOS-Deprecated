@@ -10,8 +10,6 @@
 #import "AFNetworking.h"
 #import "UserInfo.h"
 #import "OCGumbo+Query.h"
-#import "ChengJi.h"
-#import "Course.h"
 
 @interface JiaoWu ()
 @property (nonatomic)UserInfo *user;
@@ -74,6 +72,7 @@
                     [manager POST:@"http://jwgl.nepu.edu.cn/yhxigl.do?method=editUserInfo" parameters:param success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
                         // 登录成功，发出通知
                         NSLog(@"登录成功");
+                        [self loginToServer];
                         if (success) {
                             success();
                         } else {
@@ -103,6 +102,21 @@
         }
     }];
     return true;
+}
+
+- (void)loginToServer {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    NSDictionary *param = @{
+                            @"username" : self.user.username,
+                            @"last_jid" : [UserInfo cookie].value,
+                            @"versioncode" : @1
+                            };
+    [manager POST:@"http://dyjw.fly-kite.com/app/login.aspx" parameters:param success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
 }
 
 // MARK::获取学期列表
@@ -295,6 +309,253 @@
         success(nil);
     }];
 }
+
+// MARK::获取重修列表
+- (void)getChongXiuList:(void(^)(NSString *, NSArray *))success {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    NSString *url = @"http://jwgl.nepu.edu.cn/zxglAction.do?method=xszxbmList";
+    [manager GET:url parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        NSString *html = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        OCGumboDocument *doc = [[OCGumboDocument alloc] initWithHTMLString:html];
+        NSString *bmsj = doc.Query(@"#tbTable").first().Query(@"td").get(0).text();
+        if ([bmsj containsString:@"\n"]) {
+            bmsj = [bmsj substringToIndex:[bmsj rangeOfString:@"\n"].location];
+        }
+        NSMutableArray *chongxiuArray = [[NSMutableArray alloc] init];
+        OCQueryObject *rows = doc.Query(@"#mxh").first().Query(@"tr");
+        BOOL sfkbm = [html containsString:@"var sfkbm = \"true\""];
+        for (OCGumboNode *row in rows) {
+            OCQueryObject *cols = row.Query(@"td");
+            ChongXiuBuKao *model = [[ChongXiuBuKao alloc] init];
+            NSMutableString *chongxiuInfo = [[NSMutableString alloc] init];
+            [chongxiuInfo appendFormat:@"是否报名：%@\n", cols.get(0).text()];
+            [chongxiuInfo appendFormat:@"上课院审：%@\n", cols.get(1).text()];
+            [chongxiuInfo appendFormat:@"开课院审：%@\n", cols.get(2).text()];
+            [chongxiuInfo appendFormat:@"取得资格：%@\n", cols.get(3).text()];
+            [chongxiuInfo appendFormat:@"学年学期：%@\n", cols.get(4).text()];
+            model.courseName = cols.get(5).text();
+            [chongxiuInfo appendFormat:@"课程编号：%@\n", cols.get(6).text()];
+            [chongxiuInfo appendFormat:@"考试性质：%@\n", cols.get(7).text()];
+            [chongxiuInfo appendFormat:@"课程属性：%@\n", cols.get(8).text()];
+            [chongxiuInfo appendFormat:@"课程性质：%@\n", cols.get(9).text()];
+            [chongxiuInfo appendFormat:@"学时：%@\n", cols.get(10).text()];
+            [chongxiuInfo appendFormat:@"学分：%@\n", cols.get(11).text()];
+            [chongxiuInfo appendFormat:@"是否选课：%@\n", cols.get(17).text()];
+            [chongxiuInfo appendFormat:@"是否缴费：%@\n", cols.get(18).text()];
+            [chongxiuInfo appendFormat:@"性质：%@", cols.get(19).text()];
+            model.info = chongxiuInfo;
+            
+            NSString *baomingUrl = cols.get(20).Query(@"a").get(0).attr(@"onclick");
+            NSInteger start = [baomingUrl rangeOfString:@"('"].location + 2;
+            NSInteger end = [baomingUrl rangeOfString:@"')"].location;
+            baomingUrl = [baomingUrl substringWithRange:NSMakeRange(start, end - start)];
+            baomingUrl = [NSString stringWithFormat:@"http://jwgl.nepu.edu.cn%@", baomingUrl];
+            model.baomingUrl = baomingUrl;
+            
+            NSString *quxiaoUrl = cols.get(21).Query(@"a").get(0).attr(@"onclick");
+            start = [quxiaoUrl rangeOfString:@"('"].location + 2;
+            end = [quxiaoUrl rangeOfString:@"')"].location;
+            quxiaoUrl = [quxiaoUrl substringWithRange:NSMakeRange(start, end - start)];
+            quxiaoUrl = [NSString stringWithFormat:@"http://jwgl.nepu.edu.cn%@", quxiaoUrl];
+            model.quxiaoUrl = quxiaoUrl;
+            
+            if (sfkbm) {
+                if ([cols.get(0).text() isEqualToString:@"√"]) {
+                    if ([cols.get(2).text() isEqualToString:@"√"]) {
+                        model.status = @"审核时不可取消";
+                    } else {
+                        model.status = @"取消报名";
+                    }
+                } else {
+                    model.status = @"报名";
+                }
+            } else {
+                model.status = @"不可操作";
+            }
+            if ([cols.get(18).text() isEqualToString:@"√"]) {
+                model.status = @"已缴费不可取消";
+            }
+            [chongxiuArray addObject:model];
+        }
+        if (success) {
+            success(bmsj, [chongxiuArray copy]);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        success(nil, nil);
+    }];
+}
+
+// MARK::获取教学计划
+- (void)getJiHuaList:(void(^)(NSArray *jihuaArray))success {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    NSString *url = @"http://jwgl.nepu.edu.cn/pyfajhgl.do?method=toViewJxjhXs";
+    [manager POST:url parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        NSString *html = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        OCGumboDocument *doc = [[OCGumboDocument alloc] initWithHTMLString:html];
+        OCQueryObject *rows = doc.Query(@"#mxh").first().Query(@"tr");
+        NSUInteger duoyu = rows.get(0).Query(@"td").count - 11;
+        NSMutableArray *jihuaArray = [NSMutableArray array];
+        for (OCGumboNode *row in rows) {
+            OCQueryObject *cols = row.Query(@"td");
+            JiHua *jihua = [[JiHua alloc] init];
+            jihua.courseName = cols.get(3).text();
+            jihua.kaikexueqi = cols.get(1).text();
+            jihua.kechengbianma = cols.get(2).text();
+            jihua.zongxueshi = cols.get(4).text();
+            jihua.xuefen = cols.get(5).text();
+            jihua.kechengtixi = cols.get(6).text();
+            jihua.kechengshuxing = cols.get(7).text();
+            jihua.kaikedanwei = cols.get(10 + duoyu).text();
+            jihua.kaohefangshi = cols.get(9 + duoyu).text();
+            [jihua initLeftAndRightString];
+            [jihuaArray addObject:jihua];
+        }
+        [jihuaArray sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+            JiHua *j1 = obj1;
+            JiHua *j2 = obj2;
+            NSComparisonResult result = [j1.kaikexueqi compare:j2.kaikexueqi];
+            if (result == NSOrderedSame) {
+                result = -[j1.kaohefangshi compare:j2.kaohefangshi];
+            }
+            if (result == NSOrderedSame) {
+                result = [j1.courseName compare:j2.courseName];
+            }
+            return result;
+        }];
+        success(jihuaArray);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        success(nil);
+    }];
+}
+
+- (void)getBuKaoList:(void (^)(NSArray *, NSArray *, NSString *))success {
+    [self getBuKaoList:success withKebaoOrYibao:YES];
+    [self getBuKaoList:success withKebaoOrYibao:NO];
+}
+
+- (void)getBuKaoList:(void (^)(NSArray *, NSArray *, NSString *))success withKebaoOrYibao:(BOOL)kebaoOrYibao {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    NSString *url = [NSString stringWithFormat:@"http://jwgl.nepu.edu.cn/bkglAction.do?method=bkbmList&operate=%@", kebaoOrYibao ? @"kbkc" : @"ybkc"];
+    [manager POST:url parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        NSString *html = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        OCGumboDocument *doc = [[OCGumboDocument alloc] initWithHTMLString:html];
+        NSString *title = doc.Query(@"#tbTable").get(0).Query(@"td").get(0).text();
+        BOOL sfkbm = [html containsString:@"var sfkbm = \"1\""];
+        OCQueryObject *rows = doc.Query(@"#mxh").first().Query(@"tr");
+        NSMutableArray *array = [NSMutableArray array];
+        for (OCGumboNode *row in rows) {
+            OCQueryObject *cols = row.Query(@"td");
+            
+            ChongXiuBuKao *model = [[ChongXiuBuKao alloc] init];
+            NSMutableString *bukaoInfo = [[NSMutableString alloc] init];
+            [bukaoInfo appendFormat:@"开课学期：%@\n", cols.get(0).text()];
+            model.courseName = cols.get(1).text();
+            [bukaoInfo appendFormat:@"课程编号：%@\n", cols.get(2).text()];
+            [bukaoInfo appendFormat:@"考试性质：%@\n", cols.get(3).text()];
+            [bukaoInfo appendFormat:@"课程属性：%@\n", cols.get(4).text()];
+            [bukaoInfo appendFormat:@"课程性质：%@\n", cols.get(5).text()];
+            [bukaoInfo appendFormat:@"学时：%@\n", cols.get(6).text()];
+            [bukaoInfo appendFormat:@"学分：%@\n", cols.get(7).text()];
+            [bukaoInfo appendFormat:@"总成绩：%@", cols.get(8).text()];
+            if (!kebaoOrYibao) {
+                [bukaoInfo appendFormat:@"\n是否缴费：%@", cols.get(9).text()];
+            }
+            model.info = bukaoInfo;
+            
+            NSString *bmid = cols.get(9 + (kebaoOrYibao ? 0 : 1)).Query(@"a").get(0).attr(@"onclick");
+            NSInteger start = [bmid rangeOfString:@"('"].location + 2;
+            NSInteger end = [bmid rangeOfString:@"')"].location;
+            bmid = [bmid substringWithRange:NSMakeRange(start, end - start)];
+            model.bmid = bmid;
+            
+            model.baomingUrl = url;
+            model.quxiaoUrl = url;
+            
+            if (sfkbm) {
+                if (kebaoOrYibao) {
+                    model.status = @"报名";
+                } else {
+                    model.status = @"取消报名";
+                }
+            } else {
+                model.status = @"不可操作";
+            }
+            if (!kebaoOrYibao && [cols.get(9).text() isEqualToString:@"是"]) {
+                model.status = @"已缴费不可取消";
+            }
+            [array addObject:model];
+        }
+        if (kebaoOrYibao) {
+            success(array, nil, title);
+        } else {
+            success(nil, array, title);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        success(nil, nil, kebaoOrYibao ? @"可报课程" : @"已报课程");
+    }];
+}
+
+//log.appendLog("&#tstart;--------------获取补考可报列表--------------&#tend;");
+//try {
+//    con = Jsoup.connect("http://jwgl.nepu.edu.cn/bkglAction.do?method=bkbmList&operate="
+//                        + (kebaoOrYibao ? "kbkc" : "ybkc"))
+//    .timeout(6000)
+//    .cookie("JSESSIONID", JSESSIONID);
+//    Document doc = con.post();
+//    log.appendLog(doc.select("body").toString());
+//    List<Map<String, String>> al = new ArrayList<>();
+//    // 标题及报名时间
+//    String title = doc.select("#tbTable td").get(0).text();
+//    HashMap<String, String> time = new HashMap<>();
+//    time.put(kebaoOrYibao ? "kbkc" : "ybkc", title);
+//    al.add(time);
+//    // 是否可报名
+//    boolean sfkbm = doc.toString().contains("var sfkbm = \"1\"");
+//    // 补考课程
+//    Elements els = doc.select("#mxh tr");
+//    for(Element e : els) {
+//        HashMap<String, String> hashMap = new HashMap<>();
+//        Elements infos = e.select("td");
+//        hashMap.put("bk_kaikexueqi", "开课学期：" + infos.get(0).text());
+//        hashMap.put("bk_kechengmingcheng", infos.get(1).text());
+//        hashMap.put("bk_kechengbianhao", "课程编号：" + infos.get(2).text());
+//        hashMap.put("bk_kaoshixingzhi", "考试性质：" + infos.get(3).text());
+//        hashMap.put("bk_kechengshuxing", "课程属性：" + infos.get(4).text());
+//        hashMap.put("bk_kechengxingzhi", "课程性质：" + infos.get(5).text());
+//        hashMap.put("bk_xueshi", "学时：" + infos.get(6).text());
+//        hashMap.put("bk_xuefen", "学分：" + infos.get(7).text());
+//        hashMap.put("bk_zongchengji", "总成绩：" + infos.get(8).text());
+//        if (!kebaoOrYibao)  hashMap.put("bk_shifoujiaofei", "是否缴费：" + infos.get(9).text());
+//        else  hashMap.put("bk_shifoujiaofei", "");
+//        String bmid = infos.get(9 + (kebaoOrYibao ? 0 : 1)).select("a").get(0).attr("onclick");
+//        bmid = bmid.substring(bmid.indexOf("('") + 2, bmid.indexOf("')"));
+//        hashMap.put("bmid", bmid);
+//        if(sfkbm) {
+//            if(kebaoOrYibao) {
+//                hashMap.put("status", "报名");
+//            } else {
+//                hashMap.put("status", "取消报名");
+//            }
+//        } else {
+//            hashMap.put("status", "不可操作");
+//        }
+//        if(!kebaoOrYibao &&  infos.get(9).text().equals("是")) {
+//            hashMap.put("status", "已缴费不可取消");
+//        }
+//        al.add(hashMap);
+//    }
+//    return al;
+//} catch (Exception e) {
+//    e.printStackTrace();
+//    log.appendLog("&#estart;===========================================");
+//    log.appendLog(e);
+//    return null;
+//} finally {
+//    log.appendLog("&#cend;");
+//}
 
 // MARK::判断字符串是否为数字
 - (BOOL)isNumber:(NSString*)string {

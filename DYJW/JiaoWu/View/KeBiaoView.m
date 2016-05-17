@@ -118,11 +118,13 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row > 8 && indexPath.row % 8 != 0) {
-        MDAlertView *alertView = [MDAlertView alertViewWithStyle:MDAlertViewStyleDialog];
         NSInteger realRow = (indexPath.row / 8 - 1) * 7 + indexPath.row % 8 - 1;
         Course *course = self.courses[realRow];
-        alertView.message = course.rawText;
-        [alertView show];
+        if (course) {
+            MDAlertView *alertView = [MDAlertView alertViewWithStyle:MDAlertViewStyleDialog];
+            alertView.message = course.rawText;
+            [alertView show];
+        }
     }
 }
 @end

@@ -62,14 +62,14 @@
     NSMutableArray *colorLine = [[NSMutableArray alloc] init];
     for (int i = 0; i < pixelNum; i++, pCurPtr++) {
         if (*pCurPtr < 0x99999900) {
-//            printf("1");
+            printf("1");
             [colorLine addObject:@1];
         } else {
-//            printf("0");
+            printf("0");
             [colorLine addObject:@0];
         }
         if (i % 45 == 44) {
-//            printf("\n");
+            printf("\n");
             [colors addObject:colorLine];
             colorLine = [[NSMutableArray alloc] init];
         }

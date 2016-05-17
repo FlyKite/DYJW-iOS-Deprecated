@@ -1,24 +1,23 @@
 //
-//  ChengJiCell.m
+//  JiHuaCell.m
 //  DYJW
 //
-//  Created by 风筝 on 16/2/12.
+//  Created by 风筝 on 16/4/21.
 //  Copyright © 2016年 Doge Studio. All rights reserved.
 //
 
-#import "ChengJiCell.h"
+#import "JiHuaCell.h"
 #import "UIView+MDRippleView.h"
 #import "NSString+Height.h"
 
-@interface ChengJiCell ()
+@interface JiHuaCell ()
 @property (nonatomic, weak)UIView *cardView;
 @property (nonatomic, weak)UILabel *title;
-@property (nonatomic, weak)UILabel *flag;
 @property (nonatomic, weak)UILabel *left;
 @property (nonatomic, weak)UILabel *right;
 @end
 
-@implementation ChengJiCell
+@implementation JiHuaCell
 + (id)cellWithTableView:(UITableView *)tableView {
     NSString * className = NSStringFromClass([self class]);
     [tableView registerClass:[self class] forCellReuseIdentifier:className];
@@ -34,14 +33,12 @@
     return self;
 }
 
-- (void)setModel:(ChengJi *)model {
+- (void)setModel:(JiHua *)model {
     if (_model == model) {
         return;
     }
     _model = model;
     self.title.text = model.courseName;
-    self.flag.text = model.flag;
-    self.flag.textColor = model.flagColor;
     self.left.text = model.leftStr;
     self.right.text = model.rightStr;
     [self setViewFrames];
@@ -61,12 +58,6 @@
     }
 }
 
-- (void)cardClick {
-    if (self.detailAction) {
-        self.detailAction(self.model.detailURL, self.model.courseName);
-    }
-}
-
 #pragma mark - Getters
 - (UIView *)cardView {
     if (!_cardView) {
@@ -78,9 +69,6 @@
         view.layer.shadowOffset = CGSizeMake(0, 2);
         view.backgroundColor = [UIColor whiteColor];
         [view createRippleView];
-        view.rippleFinishAction = ^() {
-            [self cardClick];
-        };
         [self addSubview:view];
         _cardView = view;
     }
@@ -89,7 +77,7 @@
 
 - (UILabel *)title {
     if (!_title) {
-        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(ViewWidth(self.flag), 16, ViewWidth(self.cardView) - 36, 18)];
+        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, ViewWidth(self.cardView) - 32, 18)];
         title.font = [UIFont boldSystemFontOfSize:18];
         title.textColor = [MDColor grey900];
         [self.cardView addSubview:title];
@@ -98,20 +86,9 @@
     return _title;
 }
 
-- (UILabel *)flag {
-    if (!_flag) {
-        UILabel *flag = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 28, ViewHeight(self.cardView))];
-        flag.textAlignment = NSTextAlignmentCenter;
-        flag.font = [UIFont boldSystemFontOfSize:22];
-        [self.cardView addSubview:flag];
-        _flag = flag;
-    }
-    return _flag;
-}
-
 - (UILabel *)left {
     if (!_left) {
-        UILabel *left = [[UILabel alloc] initWithFrame:CGRectMake(ViewWidth(self.flag), 42, ViewWidth(self.cardView) - ViewWidth(self.flag) - 16, 72)];
+        UILabel *left = [[UILabel alloc] initWithFrame:CGRectMake(16, 42, ViewWidth(self.cardView) - 32, 72)];
         left.font = [UIFont systemFontOfSize:15];
         left.textColor = [MDColor grey800];
         left.numberOfLines = 0;
@@ -123,7 +100,7 @@
 
 - (UILabel *)right {
     if (!_right) {
-        UILabel *right = [[UILabel alloc] initWithFrame:CGRectMake(ViewWidth(self.flag), 42, ViewWidth(self.cardView) - ViewWidth(self.flag) - 16, 72)];
+        UILabel *right = [[UILabel alloc] initWithFrame:CGRectMake(16, 42, ViewWidth(self.cardView) - 32, 72)];
         right.font = [UIFont systemFontOfSize:15];
         right.textColor = [MDColor grey800];
         right.numberOfLines = 0;

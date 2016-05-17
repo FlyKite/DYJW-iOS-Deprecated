@@ -18,8 +18,8 @@
 
 @implementation MDTextField
 - (id)initWithFrame:(CGRect)frame {
-    frame.size.height = 48;
     if (self = [super initWithFrame:frame]) {
+        frame.size.height = 48;
         [self setFont:[UIFont systemFontOfSize:16]];
         self.frame = frame;
         [self addTarget:self action:@selector(beginEditingAnimation) forControlEvents:UIControlEventEditingDidBegin];
@@ -31,8 +31,9 @@
 - (CATextLayer *)placeholderLayer {
     if (!_placeholderLayer) {
         _placeholderLayer = [[CATextLayer alloc] init];
+        _placeholderLayer.frame = CGRectMake(self.hasPadding ? 16 : 0, ViewHeight(self) / 2 - 7, ViewWidth(self), 14);
         _placeholderLayer.foregroundColor = [MDColor grey500].CGColor;
-        _placeholderLayer.alignmentMode = kCAAlignmentJustified;
+//        _placeholderLayer.alignmentMode = kCAAlignmentJustified;
         _placeholderLayer.wrapped = YES;
         _placeholderLayer.contentsScale = [[UIScreen mainScreen] scale];
         
@@ -75,9 +76,18 @@
 
 - (void)setFrame:(CGRect)frame {
     [super setFrame:frame];
-    self.placeholderLayer.frame = CGRectMake(0, 16, frame.size.width, 14);
-    self.underlineGrayLayer.frame = CGRectMake(0, frame.size.height - 9, frame.size.width, 1);
-    self.underlineLayer.frame = CGRectMake(0, frame.size.height - 9, frame.size.width, 1);
+    self.placeholderLayer.frame = CGRectMake(self.hasPadding ? 16 : 0, ViewHeight(self) / 2 - 7, frame.size.width, 14);
+    self.underlineGrayLayer.frame = CGRectMake(0, frame.size.height - (self.hasPadding ? 0 : 9), frame.size.width, 1);
+    self.underlineLayer.frame = CGRectMake(0, frame.size.height - (self.hasPadding ? 0 : 9), frame.size.width, 1);
+}
+//控制 placeHolder 的位置，左右缩 20
+- (CGRect)textRectForBounds:(CGRect)bounds {
+    return CGRectInset( bounds , self.hasPadding ? 16 : 0, 0);
+}
+
+// 控制文本的位置，左右缩 20
+- (CGRect)editingRectForBounds:(CGRect)bounds {
+    return CGRectInset(bounds, self.hasPadding ? 16 : 0, 0);
 }
 
 - (void)setPlaceholder:(NSString *)placeholder {
@@ -96,6 +106,13 @@
     } else {
         [super setText:text];
     }
+}
+
+- (void)setHasPadding:(BOOL)hasPadding {
+    _hasPadding = hasPadding;
+    self.placeholderLayer.frame = CGRectMake(self.hasPadding ? 16 : 0, ViewHeight(self) / 2 - 7, ViewWidth(self) - 32, 14);
+    self.underlineGrayLayer.frame = CGRectMake(0, ViewHeight(self) - (self.hasPadding ? 1 : 9), ViewWidth(self), 1);
+    self.underlineLayer.frame = CGRectMake(0, ViewHeight(self) - (self.hasPadding ? 1 : 9), ViewWidth(self), 1);
 }
 
 - (void)editingAnimation:(BOOL)begin {
