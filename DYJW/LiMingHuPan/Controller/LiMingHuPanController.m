@@ -59,29 +59,29 @@
 
 - (void)loadData {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
     NSDictionary *param = @{
                             @"page" : @(self.page)
                             };
-    [manager GET:@"http://dyjw.fly-kite.com/app/lmhp/item.aspx" parameters:param success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull jsonData) {
-        NSArray *json = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
-        if (self.page == 1) {
-            [self.dataArray removeAllObjects];
+    [manager GET:CombineUrl(@"app/lmhp/item") parameters:param success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull json) {
+        if ([json[@"result"] integerValue] == 0) {
+            if (self.page == 1) {
+                [self.dataArray removeAllObjects];
+            }
+            for (NSDictionary *dict in json[@"data"]) {
+                LMHPItem *item = [[LMHPItem alloc] init];
+                item.logo = dict[@"userLogo"];
+                item.nickname = dict[@"nickname"];
+                item.pubtime = dict[@"pubTime"];
+                item.itemId = dict[@"id"];
+                item.price = dict[@"price"];
+                item.title = dict[@"title"];
+                item.desc = dict[@"content"];
+                item.images = dict[@"images"];
+                [self.dataArray addObject:item];
+            }
+            [self.tableView reloadData];
         }
-        for (NSDictionary *dict in json) {
-            LMHPItem *item = [[LMHPItem alloc] init];
-            item.logo = dict[@"logo"];
-            item.nickname = dict[@"nickname"];
-            item.pubtime = dict[@"pubtime"];
-            item.itemId = dict[@"id"];
-            item.price = dict[@"price"];
-            item.title = dict[@"title"];
-            item.desc = dict[@"description"];
-            item.typeName = dict[@"type_name"];
-            item.images = dict[@"images"];
-            [self.dataArray addObject:item];
-        }
-        [self.tableView reloadData];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"error%@", error);
     }];

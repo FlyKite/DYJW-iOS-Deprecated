@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface UserInfo : NSObject
-+ (id)userInfo;
++ (instancetype)userInfo;
 + (void)saveUsername:(NSString *)username andPassword:(NSString *)password andLoginTime:(NSTimeInterval)logintime;
 + (void)updateLoginTime:(NSTimeInterval)loginTime;
 + (void)saveCookieWithUrl:(NSString *)url;

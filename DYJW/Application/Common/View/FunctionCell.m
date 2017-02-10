@@ -23,6 +23,7 @@
     UIView *bg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width / 3 * 2, 46)];
     bg.backgroundColor = [MDColor lightBlue100];
     self.selectedBackgroundView = bg;
+    self.clipsToBounds = YES;
     [self createRippleViewWithColor:[MDColor lightBlue50] andAlpha:0.5];
 }
 

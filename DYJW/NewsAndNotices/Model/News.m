@@ -19,6 +19,7 @@
 @implementation News
 + (void)newsWithPath:(NSString *)path andPage:(NSInteger)page {
     NSString *url;
+    // 通过传入的path值的第一位判断该板块属于东油新闻还是教务通知
     if([[path substringToIndex:1] isEqualToString:@"3"]) {
         url = @"http://glbm1.nepu.edu.cn/jwc/dwr/call/plaincall/portalAjax.getNewsXml.dwr";
     } else if([[path substringToIndex:1] isEqualToString:@"5"]) {
@@ -26,10 +27,13 @@
     }
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    // 通过传入的path值生成相应的参数
     NSString *param = [NSString stringWithFormat:@"callCount=1\npage=/jwc/type/%@\nhttpSessionId=0\nscriptSessionId=0\nc0-scriptName=portalAjax\nc0-methodName=getNewsXml\nc0-id=0\nc0-param0=string:%@\nc0-param1=string:%@\nc0-param2=string:news_\nc0-param3=number:15\nc0-param4=number:%ld\nc0-param5=null:null\nc0-param6=null:null\nbatchId=0", path, [path substringToIndex:4], [path substringToIndex:6], page];
+    // 将requestSerializer替换成自定制的StringBodyRequestSerialization
     manager.requestSerializer = [StringBodyRequestSerialization serializer];
     [manager POST:url parameters:param success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSString *data = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        // 获取到服务器响应后将二进制流转为字符串并截取其中的XML部分的内容
         data = [data substringFromIndex:[data rangeOfString:@"<?xml"].location];
         data = [data substringToIndex:data.length - 5];
         NSMutableString *xml = [data mutableCopy];
@@ -43,6 +47,7 @@
             [xml replaceCharactersInRange:range withString:@"\n"];
             range = [xml rangeOfString:@"\\n"];
         }
+        // 将截取到的内容中的Unicode编码字符转为中文并进行XML解析
         NSArray *newsArray = [self parseXML:[[self replaceUnicode:xml] dataUsingEncoding:NSUTF8StringEncoding]];
         [[NSNotificationCenter defaultCenter] postNotificationName:[NSString stringWithFormat:@"NEWS_%@", path] object:newsArray];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -114,6 +119,7 @@
     }];
 }
 
+// 开始进行XML解析
 + (NSArray *)parseXML:(NSData *)data {
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
     News *news = [[News alloc] init];

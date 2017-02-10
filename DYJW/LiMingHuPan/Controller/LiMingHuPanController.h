@@ -6,8 +6,8 @@
 //  Copyright © 2015年 Doge Studio. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "ToolbarSubViewController.h"
 
-@interface LiMingHuPanController : UIViewController
+@interface LiMingHuPanController : ToolbarSubViewController
 
 @end

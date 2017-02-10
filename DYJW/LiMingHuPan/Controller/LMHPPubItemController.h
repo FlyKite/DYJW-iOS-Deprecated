@@ -6,8 +6,8 @@
 //  Copyright © 2016年 Doge Studio. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "ToolbarSubViewController.h"
 
-@interface LMHPPubItemController : UIViewController
+@interface LMHPPubItemController : ToolbarSubViewController
 
 @end

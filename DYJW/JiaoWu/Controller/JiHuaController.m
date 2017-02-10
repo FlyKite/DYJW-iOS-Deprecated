@@ -21,6 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.title = @"教学计划";
     self.view.backgroundColor = [MDColor grey50];
     [self getJiHua];
 }

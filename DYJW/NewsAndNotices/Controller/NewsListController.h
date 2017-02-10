@@ -6,13 +6,13 @@
 //  Copyright © 2015年 Doge Studio. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "ToolbarSubViewController.h"
 
 typedef NS_ENUM(NSUInteger, NewsListType) {
     NewsListDongYouNews,
     NewsListJiaowuNotice
 };
 
-@interface NewsListController : UIViewController
+@interface NewsListController : ToolbarSubViewController
 @property (nonatomic, assign)NewsListType newsListType;
 @end

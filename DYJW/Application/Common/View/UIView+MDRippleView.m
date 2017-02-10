@@ -46,6 +46,7 @@ static char rippleFinishActionKey;
     [self createRippleViewWithColor:[color colorWithAlphaComponent:alpha]];
 }
 
+// 圆形扩散层
 - (CAShapeLayer *)rippleLayer {
     CAShapeLayer *_rippleLayer = objc_getAssociatedObject(self, &rippleLayerKey);
     if (!_rippleLayer) {
@@ -152,6 +153,7 @@ static char rippleFinishActionKey;
     [self performSelector:@selector(endRipple) withObject:nil afterDelay:0.1];
 }
 
+// 用户执行触摸操作以慢速开始扩散动画
 - (void)startRipple:(NSSet<UITouch *> *)touches {
     if (!self.ripple || self.cancelRipple) {
         return;
@@ -164,6 +166,7 @@ static char rippleFinishActionKey;
     [self rippleStartWithPoint:point andOffset:0 andSpeed:1];
 }
 
+// 当用户手指抬起或者取消触摸（即手指滑出某一范围）时以极快的速度完成扩散动画
 - (void)endRipple{
     if (!self.ripple) {
         return;
@@ -181,17 +184,20 @@ static char rippleFinishActionKey;
     CGFloat radius = sqrt(width * width + height * height) / 2;
     CGFloat duration = 3;
     
+    // 绘制圆形
     UIBezierPath *circle = [UIBezierPath bezierPathWithArcCenter:CGPointMake(width/2, height/2) radius:radius startAngle:0 endAngle:2*M_PI clockwise:YES];
     self.rippleLayer.path = circle.CGPath;
     
+    // 移动动画，将圆心从手指处移动到控件的中心
     CABasicAnimation *moveAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
     CGFloat fromValue = duration - offset > 0 ? (duration - offset) / duration : 0;
     fromValue = 1 - fromValue;
     CGPoint fromPoint = CGPointMake((width / 2 - point.x) * fromValue + point.x, (height / 2 - point.y) * fromValue + point.y);
     moveAnimation.fromValue = [NSValue valueWithCGPoint:fromPoint];
     moveAnimation.toValue = [NSValue valueWithCGPoint:CGPointMake(width / 2, height / 2)];
-    moveAnimation.duration = duration - offset > 0 ? duration - offset : 0;;
+    moveAnimation.duration = duration - offset > 0 ? duration - offset : 0;
     
+    // 比例动画，将圆形从0个像素的大小放大到铺满整个控件
     CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
     pathAnimation.duration = duration - offset > 0 ? duration - offset : 0;
     pathAnimation.fromValue = [NSNumber numberWithFloat:fromValue];
@@ -199,6 +205,7 @@ static char rippleFinishActionKey;
     pathAnimation.fillMode = kCAFillModeForwards;
     pathAnimation.removedOnCompletion = NO;
     
+    // 透明度动画，当圆形扩散到整个控件时让圆形淡出
     CABasicAnimation *alphaAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
     fromValue = offset > duration ? (duration * 2 - offset) / duration : 1.0;
     alphaAnimation.fromValue = [NSNumber numberWithFloat:fromValue];
@@ -206,6 +213,7 @@ static char rippleFinishActionKey;
     alphaAnimation.duration = offset > duration ? duration * 2 - offset : duration;
     alphaAnimation.beginTime = offset > duration ? 0 : duration - offset;
     
+    // 将以上三个动画组合并按顺序显示
     CAAnimationGroup *groupAnimation = [CAAnimationGroup animation];
     groupAnimation.duration = duration * 2 - offset;
     groupAnimation.animations = @[moveAnimation, pathAnimation, alphaAnimation];

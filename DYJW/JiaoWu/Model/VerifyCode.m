@@ -27,8 +27,11 @@
     }];
 }
 
+// 对验证码图片进行识别
 - (NSString *)getVerifyCode:(UIImage *)image {
     NSArray *letters = @[@"b", @"c", @"m", @"n", @"v", @"x", @"z", @"1", @"2", @"3"];
+    // 该二维数组中的每一个一维数组是letters数组中相应字母的点阵表示按照二进制转换为十进制的数值
+    // 如b的第一列是01111111即十进制的4095
     NSArray *nums =@[
                      @[@4095,@4095,@1584,@3096,@3096,@3640,@2032,@992],
                      @[@992,@2032,@3640,@3096,@3096,@3640,@560],
@@ -75,7 +78,7 @@
         }
     }
     
-    // 释放内存！重要！千万要按顺序释放！
+    // 释放内存！重要！千万要按顺序释放！否则会导致内存泄露
     free(rgbImageBuf);
     CGColorSpaceRelease(colorSpace);
     CGContextRelease(context);
@@ -96,6 +99,7 @@
     return vcode;
 }
 
+// 对每一列进行与运算以消除图片中干扰线的影响
 - (BOOL)compare:(NSArray*)source position:(int)position dest:(NSArray*)dest {
     for (int x = position; x < position + dest.count - 1 && x < 45; x++) {
         // 计算图片当前列的像素点的比特值

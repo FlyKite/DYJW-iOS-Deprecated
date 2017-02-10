@@ -9,15 +9,17 @@
 #import "NewsListController.h"
 #import "News.h"
 #import "TabView.h"
-#import "NewsList.h"
 #import "NewsController.h"
+#import "NewsListCell.h"
+#import "AFNetworking.h"
 
 #define Padding 16
 
-@interface NewsListController () <TabViewDelegate, NewsListDelegate, UIScrollViewDelegate>
+@interface NewsListController () <TabViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, weak)TabView *tab;
 @property (nonatomic, strong)NSArray *pathArray;
-@property (nonatomic, weak)UIScrollView *contentView;
+@property (strong, nonatomic) NSMutableDictionary *newsListDict;
+@property (strong, nonatomic) UICollectionView *collectionView;
 @end
 
 @implementation NewsListController
@@ -32,46 +34,9 @@
         self.tab.data = @[@"通知公告", @"新闻动态", @"机构设置", @"办事指南", @"规章制度", @"教学建设", @"资料下载", @"信息发布", @"高教视窗"];
         self.pathArray = @[@"350312.html", @"350309.html", @"350302.html", @"350304.html", @"350303.html", @"350316.html", @"350305.html", @"350307.html", @"350317.html"];
     }
+    self.newsListDict = [NSMutableDictionary dictionary];
     self.automaticallyAdjustsScrollViewInsets = NO;
-    [self contentView];
-    [self newsListWithPage:1];
-}
-
-- (UIScrollView *)contentView {
-    if (!_contentView) {
-        UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 36, ScreenWidth, ScreenHeight - 36 - 76)];
-        scrollView.delegate = self;
-        scrollView.bounces = NO;
-        scrollView.pagingEnabled = YES;
-        scrollView.showsHorizontalScrollIndicator = NO;
-        scrollView.canCancelContentTouches = NO;
-        [self.view addSubview:scrollView];
-        _contentView = scrollView;
-    }
-    return _contentView;
-}
-
-- (void)setPathArray:(NSArray *)pathArray {
-    _pathArray = pathArray;
-    self.contentView.contentSize = CGSizeMake(self.contentView.frame.size.width * pathArray.count, self.contentView.frame.size.height);
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    NSInteger page = scrollView.contentOffset.x / scrollView.frame.size.width + 1;
-    [self newsListWithPage:page];
-    self.tab.position = page;
-}
-
-- (NewsList *)newsListWithPage:(NSInteger)page {
-    NewsList *newsList = [self.view viewWithTag:page + 1234];
-    if (!newsList) {
-        NewsList *newsList = [[NewsList alloc] initWithFrame:CGRectMake(self.contentView.frame.size.width * (page - 1), 0, self.contentView.frame.size.width, self.contentView.frame.size.height) style:UITableViewStylePlain];
-        newsList.tag = page + 1234;
-        newsList.path = self.pathArray[page - 1];
-        newsList.newsDelegate = self;
-        [self.contentView addSubview:newsList];
-    }
-    return newsList;
+    [self collectionView];
 }
 
 - (TabView *)tab {
@@ -84,15 +49,75 @@
     return _tab;
 }
 
-- (void)tabClicked:(NSInteger)position {
-    [UIView animateWithDuration:0.4 animations:^{
-        self.contentView.contentOffset = CGPointMake(self.contentView.frame.size.width * (position), 0);
-    }];
-    [self newsListWithPage:position + 1];
+- (UICollectionView *)collectionView {
+    if (!_collectionView) {
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        layout.minimumLineSpacing = 0;
+        layout.minimumInteritemSpacing = 0;
+        layout.itemSize = CGSizeMake(ScreenWidth, ScreenHeight - 36 - 76);
+        UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 36, ScreenWidth, ScreenHeight - 36 - 76) collectionViewLayout:layout];
+        collectionView.delegate = self;
+        collectionView.dataSource = self;
+        collectionView.pagingEnabled = YES;
+        collectionView.backgroundColor = [UIColor clearColor];
+        [collectionView registerClass:[NewsListCell class] forCellWithReuseIdentifier:@"cell"];
+        [self.view addSubview:collectionView];
+        _collectionView = collectionView;
+    }
+    return _collectionView;
 }
 
-- (void)newsClicked:(NSString *)url {
-    [self performSelector:@selector(viewNews:) withObject:url afterDelay:0.3];
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.pathArray.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NewsListCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    NSMutableArray *list = self.newsListDict[[NSString stringWithFormat:@"%ld", (long)indexPath.item]];
+    cell.dataArray = list;
+    cell.newsClickAction = ^(NSString *url) {
+        [self performSelector:@selector(viewNews:) withObject:url afterDelay:0.3];
+    };
+    [self loadNewsList:indexPath.item];
+    return cell;
+}
+
+- (void)loadNewsList:(NSInteger)index {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    NSDictionary *param = @{
+                            @"newsPath" : self.pathArray[index],
+                            @"page" : @1
+                            };
+    [manager GET:@"http://123.57.151.235/DYJW/app/getNewsList" parameters:param success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull json) {
+        if ([json[@"result"] integerValue] == 0) {
+            NSString *listKey = [NSString stringWithFormat:@"%ld", (long)index];
+            NSMutableArray *list = self.newsListDict[listKey];
+            if (!list) {
+                list = [NSMutableArray array];
+            }
+            [list addObjectsFromArray:json[@"data"]];
+            self.newsListDict[listKey] = list;
+            NewsListCell *cell = (NewsListCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0]];
+            cell.dataArray = list;
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+}
+
+- (void)tabClicked:(NSInteger)position {
+    [UIView animateWithDuration:0.4 animations:^{
+        self.collectionView.contentOffset = CGPointMake(self.collectionView.frame.size.width * (position), 0);
+    }];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSInteger page = scrollView.contentOffset.x / scrollView.frame.size.width + 1;
+    page = page > 0 ? page : 1;
+    page = page <= self.tab.data.count ? page : self.tab.data.count;
+    self.tab.position = page;
 }
 
 - (void)viewNews:(NSString *)url {

@@ -110,9 +110,10 @@
     NSDictionary *param = @{
                             @"username" : self.user.username,
                             @"last_jid" : [UserInfo cookie].value,
-                            @"versioncode" : @1
+                            @"versioncode" : @1,
+                            @"name" : [UserInfo userInfo].name
                             };
-    [manager POST:@"http://dyjw.fly-kite.com/app/login.aspx" parameters:param success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    [manager POST:CombineUrl(@"app/login") parameters:param success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
@@ -153,10 +154,13 @@
                              @"kcmc" : @"",
                              @"xsfs" : @""
                              };
+    // 请求成绩查询页面，此处传入的参数为开课学期如2015-2016-2，其余参数为空字符串
+    // AFNetworking使用NSHTTPCookieStorage进行管理，登录后无需手动管理
     [manager POST:@"http://jwgl.nepu.edu.cn/xszqcjglAction.do?method=queryxscj" parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        // 得到服务器响应后将二进制流转为字符串，随后调用OCGumbo转为可以解析的Document对象
         NSString *html = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         OCGumboDocument *doc = [[OCGumboDocument alloc] initWithHTMLString:html];
-        // 获取绩点
+        // 使用OCGumbo的Query方法获得id为tblBm的节点，绩点及学分信息分别存储在该节点的第1个和第3个span标签内
         OCGumboNode *jd = doc.Query(@"#tblBm").first().Query(@"td").first();
         NSString *xuefen = jd.Query(@"span").get(1).text();
         NSString *jidian = jd.Query(@"span").get(3).text();
@@ -190,7 +194,7 @@
             if (cols.count > 11) model.kaoshixingzhi = cols.get(11).text();
             if (cols.count > 12) model.buchongxueqi = cols.get(12).text();
             
-            // 成绩详情URL
+            // 此处通过a标签的onclick属性内的值生成查询成绩详情的URL
             NSString *detailURL = [chengji getAttribute:@"onclick"];
             NSInteger start = [detailURL rangeOfString:@"/"].location;
             NSInteger end = [detailURL rangeOfString:@"'" options:NSBackwardsSearch].location;
@@ -201,6 +205,7 @@
             [chengjiArray addObject:model];
         }
         if (success) {
+            // 执行完成绩信息的解析之后通过success代码块将成绩信息、学分、绩点会传到调用该方法的代码处
             success([chengjiArray copy], xuefen, jidian);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

@@ -25,6 +25,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     // 检查登录状态
     UserInfo *loginUser = [UserInfo userInfo];
     NSTimeInterval timeElapsed = [[NSDate date] timeIntervalSince1970] - loginUser.logintime;

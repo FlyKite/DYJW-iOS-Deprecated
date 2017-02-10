@@ -10,7 +10,7 @@
 
 static UserInfo *user;
 @implementation UserInfo
-+ (id)userInfo {
++ (instancetype)userInfo {
     if (!user) {
         user = [[self alloc] init];
     }

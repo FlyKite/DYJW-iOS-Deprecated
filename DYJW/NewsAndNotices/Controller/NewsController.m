@@ -21,12 +21,8 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
-    [News newsWithURL:self.url];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData:) name:[NSString stringWithFormat:@"NEWS_CONTENT"] object:nil];
-}
-
-- (void)refreshData:(NSNotification *)notification {
-    [self.webView loadHTMLString:notification.object baseURL:[NSURL URLWithString:self.url]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.url]];
+    [self.webView loadRequest:request];
 }
 
 - (WKWebView *)webView {

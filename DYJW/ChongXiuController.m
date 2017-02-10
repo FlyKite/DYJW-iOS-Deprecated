@@ -24,6 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.title = @"重修报名";
     self.view.backgroundColor = [MDColor grey50];
     [self getChongXiu];
 }

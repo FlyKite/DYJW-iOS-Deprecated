@@ -40,7 +40,7 @@
             self.noCourseLabel.hidden = NO;
         }
     }
-    [self test];
+//    [self test];
 }
 
 #warning test

@@ -15,13 +15,20 @@
     UINib * nib = [UINib nibWithNibName:className bundle:nil];
     [tableView registerNib:nib forCellReuseIdentifier:className];
     NewsCell *cell = [tableView dequeueReusableCellWithIdentifier:className];
-    [cell createRippleView];
     return cell;
 }
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        [self createRippleView];
+    }
+    return self;
+}
+
 - (void)setData:(NSDictionary *)data {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.tabLabel.text = data[@"lmmc"];
+    self.tabLabel.text = data[@"topic"];
     self.titleLabel.text = data[@"title"];
-    self.timeLabel.text = data[@"pubDate"];
+    self.timeLabel.text = data[@"date"];
 }
 @end

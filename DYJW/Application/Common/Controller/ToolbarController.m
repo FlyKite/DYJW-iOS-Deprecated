@@ -23,8 +23,9 @@
 @interface ToolbarController () <ChangeFunctionDelegate> {
     CGRect drawerPanStartFrame;
 }
-@property (nonatomic, weak)UIView *contentViewContainer;
+//@property (nonatomic, weak)UIView *contentViewContainer;
 @property (nonatomic, strong)UIViewController *viewController;
+@property (nonnull, strong)UIPanGestureRecognizer *viewPan;
 @property (nonatomic, weak)UILabel *titleLabel;
 @property (nonatomic, weak)NavigationDrawer *drawer;
 @property (nonatomic, weak)Hamburger *hamburger;
@@ -36,9 +37,9 @@
     [super viewDidLoad];
     
     [self setNavigationBar];
-    [self initContainer];
     [self initDrawerAndHamburger];
     [self initGesture];
+    [self setRootViewControllerWithIndex:0];
 }
 
 - (void)setNavigationBar {
@@ -57,31 +58,8 @@
 }
 
 - (void)setTitle:(NSString *)title {
-    self.titleLabel.text = title;
-}
-
-// 设置子controller容器
-- (void)initContainer {
-    CGRect frame = self.view.bounds;
-    frame.size.height -= StatusBarHeight + ToolbarHeight;
-    frame.origin.y = StatusBarHeight + ToolbarHeight;
-    UIView *contentViewContainer = [[UIView alloc] initWithFrame:frame];
-    [self.view addSubview:contentViewContainer];
-    self.contentViewContainer = contentViewContainer;
-    
-    [self.contentViewContainer addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionOld context:nil];
-    
-    [self setRootViewControllerWithIndex:0];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"frame"]) {
-        [self.contentViewContainer removeObserver:self forKeyPath:@"frame"];
-        CGRect frame = self.view.bounds;
-        frame.size.height -= StatusBarHeight + ToolbarHeight;
-        frame.origin.y = StatusBarHeight + ToolbarHeight;
-        self.contentViewContainer.frame = frame;
-        [self.contentViewContainer addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionOld context:nil];
+    if (title) {
+        self.titleLabel.text = title;
     }
 }
 
@@ -97,7 +75,9 @@
 // 添加抽屉滑入滑出以及hamburger的点击手势
 - (void)initGesture {
     UIPanGestureRecognizer *containerPan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(dealDrawerPan:)];
-    [self.contentViewContainer addGestureRecognizer:containerPan];
+    containerPan.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:containerPan];
+    self.viewPan = containerPan;
     
     UIPanGestureRecognizer *drawerPan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(dealDrawerPan:)];
     [self.drawer addGestureRecognizer:drawerPan];
@@ -109,11 +89,14 @@
 // 处理抽屉的滑动手势
 - (void)dealDrawerPan:(UIPanGestureRecognizer *)pan {
     if (self.hamburger.state == HamburgerStatePopBack) {
+        // 当Hamburger按钮显示为指向左侧的箭头时不可滑出Drawer
         return;
     }
-    if (pan.view == self.contentViewContainer && pan.state == UIGestureRecognizerStateBegan) {
+    if (pan.view == self.view && pan.state == UIGestureRecognizerStateBegan) {
+        // 用户开始Pan（拖动）手势时进行判断
         CGPoint point = [pan locationInView:pan.view];
         if (point.x < 30) {
+            // 若用户从距离屏幕左侧30个像素的距离内开始滑动则响应用户手势，否则不做任何处理
             CGRect frame = self.drawer.frame;
             frame.origin.x = 0;
             self.drawer.frame = frame;
@@ -121,12 +104,14 @@
             self.drawer.stateValue = point.x / (self.drawer.frame.size.width * 2 / 3);
         }
     } else if (pan.state == UIGestureRecognizerStateChanged) {
+        // 响应用户手势之后在用户滑动过程中随时计算Drawer的位置
         CGFloat stateValue = 0;
         CGPoint point = [pan locationInView:pan.view];
         if (point.x > self.drawer.frame.size.width * 2 / 3) {
+            stateValue = 1.0;
             return;
         }
-        if (pan.view == self.contentViewContainer && self.drawer.frame.origin.x == 0) {
+        if (pan.view == self.view && self.drawer.frame.origin.x == 0) {
             stateValue = point.x / (self.drawer.frame.size.width * 2 / 3);
         }
         if (pan.view == self.drawer) {
@@ -135,8 +120,10 @@
         self.drawer.stateValue = stateValue;
         self.hamburger.stateValue = self.hamburger.state == HamburgerStateNormal ? (stateValue > 1 ? 1 : stateValue) : 1 - stateValue;
     } else if (pan.state == UIGestureRecognizerStateEnded) {
+        // 当用户抬起手指时作出结束判断
         CGPoint v = [pan velocityInView:pan.view];
         if (v.x > 600 || v.x < -600) {
+            // 若用户抬起手指时速度大于600像素点每秒则会根据用户滑动方向作出打开或关闭Drawer的动作
             self.drawer.stateValue = v.x > 0 && self.drawer.frame.origin.x == 0 ? 1 : 0;
             if (v.x > 0 && self.drawer.frame.origin.x == 0) {
                 self.hamburger.stateValue = self.hamburger.state == HamburgerStateNormal ? 1 : 0;
@@ -144,6 +131,7 @@
                 self.hamburger.stateValue = self.hamburger.state == HamburgerStateBack ? 1 : 0;
             }
         } else {
+            // 若用户抬起手指是速度不满足要求则判断Drawer滑出位置是否大于一半，若为是则打开Drawer，否则关闭Drawer
             CGFloat stateValue = self.drawer.stateValue < 0.5 ? 0 : 1;
             self.drawer.stateValue = stateValue;
             self.hamburger.stateValue = self.hamburger.state == HamburgerStateNormal ? stateValue : 1 - stateValue;
@@ -219,22 +207,15 @@
 }
 
 - (void)setRootViewController:(UIViewController *)rootViewController {
-    if (!_viewController) {
+    if (_viewController != rootViewController) {
         _viewController = rootViewController;
-    } else {
-        [_viewController willMoveToParentViewController:nil];
-        [_viewController.view removeFromSuperview];
-        [_viewController removeFromParentViewController];
-        _viewController = rootViewController;
+        [self popToRootViewControllerAnimated:NO];
+        if ([self.viewControllers containsObject:rootViewController]) {
+            [super popToViewController:rootViewController animated:NO];
+        } else {
+            [super pushViewController:rootViewController animated:NO];
+        }
     }
-    
-    [self addChildViewController:rootViewController];
-    CGRect frame = self.view.bounds;
-    frame.size.height -= StatusBarHeight + ToolbarHeight;
-    rootViewController.view.frame = frame;
-    [rootViewController viewWillAppear:YES];
-    [self.contentViewContainer addSubview:rootViewController.view];
-    [rootViewController didMoveToParentViewController:self];
 }
 
 - (UIViewController *)controllerWithIndex:(NSInteger)index {
@@ -270,10 +251,24 @@
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
     [super pushViewController:viewController animated:animated];
     self.hamburger.state = HamburgerStatePopBack;
+    self.viewPan.enabled = NO;
+}
+
+- (nullable NSArray<__kindof UIViewController *> *)popToViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    NSArray *controllers = [super popToViewController:viewController animated:animated];
+    if ([self.controllersDict.allValues containsObject:viewController]) {
+        self.hamburger.state = HamburgerStateNormal;
+    }
+    return controllers;
 }
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated {
-    return [super popViewControllerAnimated:animated];
+    self.viewPan.enabled = YES;
+    UIViewController *controller = [super popViewControllerAnimated:animated];
+    if ([self.controllersDict.allValues containsObject:self.topViewController]) {
+        self.hamburger.state = HamburgerStateNormal;
+    }
+    return controller;
 }
 
 - (NSMutableDictionary *)controllersDict {
@@ -287,15 +282,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -18,6 +18,7 @@
 
 @interface LMHPPubItemController () <UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, ZYQAssetPickerControllerDelegate>
 @property (strong, nonatomic) MDTextField *titleField;
+@property (strong, nonatomic) MDTextField *priceField;
 @property (strong, nonatomic) UITextView *desc;
 @property (strong, nonatomic) UILabel *descPlaceholder;
 @property (strong, nonatomic) MDFlatButton *pubButton;
@@ -68,11 +69,18 @@
 - (void)createView {
     self.view.backgroundColor = [MDColor grey50];
     
-    MDTextField *title = [[MDTextField alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 48)];
+    MDTextField *title = [[MDTextField alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth / 3 * 2, 48)];
     title.hasPadding = YES;
     title.placeholder = @"物品标题";
     [self.view addSubview:title];
     self.titleField = title;
+    
+    MDTextField *price = [[MDTextField alloc] initWithFrame:CGRectMake(ScreenWidth / 3 * 2, 0, ScreenWidth / 3, 48)];
+    price.hasPadding = YES;
+    price.placeholder = @"价格";
+    price.keyboardType = UIKeyboardTypeDecimalPad;
+    [self.view addSubview:price];
+    self.priceField = price;
     
     MDFlatButton *button = [MDFlatButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"发布" forState:UIControlStateNormal];
@@ -129,11 +137,13 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == self.imageArray.count) {
+        // 点击加号则弹出添加图片的选项
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"添加图片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照", @"相册", nil];
         sheet.tag = 0x1000;
         [sheet showInView:self.view];
         [self.view endEditing:YES];
     } else {
+        // 点击已有图片则弹出删除图片的选项
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"删除图片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"删除图片" otherButtonTitles:nil];
         sheet.tag = 0x2000 + indexPath.row;
         [sheet showInView:self.view];
@@ -141,11 +151,13 @@
 }
 
 #pragma mark - ActionSheet delegate
+// 点击选项后执行
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (actionSheet.tag == 0x1000) {
         if (buttonIndex == 0) {
             // 拍照
             AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+            // 判断相机权限
             if (authStatus ==AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusDenied){
                 MDAlertView *alertView = [MDAlertView alertViewWithStyle:MDAlertViewStyleDialog];
                 alertView.message = @"请在“设置-东油教务”中开启东油教务访问相机的权限";
@@ -161,6 +173,7 @@
         } else if (buttonIndex == 1) {
             // 相册
             ALAuthorizationStatus author = [ALAssetsLibrary authorizationStatus];
+            // 判断相册权限
             if (author == AVAuthorizationStatusRestricted || author ==AVAuthorizationStatusDenied) {
                 MDAlertView *alertView = [MDAlertView alertViewWithStyle:MDAlertViewStyleDialog];
                 alertView.message = @"请在“设置-东油教务”中开启东油教务访问相册的权限";
@@ -184,6 +197,8 @@
         }
     }
 }
+
+// 拍照添加图片
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     [picker dismissViewControllerAnimated:YES completion:nil];
     dispatch_queue_t queue = dispatch_queue_create("compress", NULL);
@@ -195,6 +210,7 @@
     });
 }
 
+// 从相册添加图片
 - (void)assetPickerController:(ZYQAssetPickerController *)picker didFinishPickingAssets:(NSArray *)assets {
     //    [self.imageArray removeAllObjects];
     dispatch_queue_t queue = dispatch_queue_create("compress", NULL);
@@ -208,6 +224,7 @@
     });
 }
 
+// 将图片压缩到长宽最大值为1536
 - (UIImage *)compressImage:(UIImage*)image {
     CGFloat maxWidthOrHeight = 1536;
     CGFloat width = image.size.width > image.size.height ? maxWidthOrHeight  : image.size.width * maxWidthOrHeight / image.size.height;
@@ -234,35 +251,43 @@
         alert.message = @"请输入物品描述";
         [alert show];
         return;
+    } else if (self.priceField.text.length == 0) {
+        MDAlertView *alert = [MDAlertView alertViewWithStyle:MDAlertViewStyleDialog];
+        alert.message = @"请输入物品价格";
+        [alert show];
+        return;
     }
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
     UserInfo *user = [UserInfo userInfo];
     NSDictionary *param = @{
                             @"username" : user.username,
                             @"last_jid" : [UserInfo cookie].value,
-                            @"title" : self.titleField.text,
-                            @"description" : self.desc.text,
-                            @"type_id" : @"1",
-                            @"price" : @(123.45)
+                            @"item.title" : self.titleField.text,
+                            @"item.content" : self.desc.text,
+//                            @"item" : @"1",
+                            @"item.price" : @([self.priceField.text floatValue])
                             };
-    [manager POST:@"http://dyjw.fly-kite.com/app/lmhp/post_item.aspx" parameters:param constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    [manager POST:CombineUrl(@"app/lmhp/pubItem") parameters:param constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         NSInteger length = 0;
         for (UIImage *image in self.imageArray) {
             NSString *filename = [NSString stringWithFormat:@"image%p.jpg", image];
             NSData *imageData = UIImageJPEGRepresentation(image, 0.6);
-            [formData appendPartWithFileData:imageData name:@"pictures" fileName:filename mimeType:@"image/jpeg"];
+            [formData appendPartWithFileData:imageData name:@"images" fileName:filename mimeType:@"image/jpeg"];
             length += imageData.length;
         }
         NSLog(@"contentSize=%ld", (long)length);
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
-        id json = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        if ([json[@"code"] integerValue] == 200) {
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull json) {
+        if ([json[@"result"] integerValue] == 0) {
             [self.navigationController popViewControllerAnimated:YES];
+            MDAlertView *alert = [MDAlertView alertViewWithStyle:MDAlertViewStyleDialog];
+            alert.message = @"发布成功";
+            [alert show];
+        } else {
+            MDAlertView *alert = [MDAlertView alertViewWithStyle:MDAlertViewStyleDialog];
+            alert.message = json[@"msg"];
+            [alert show];
         }
-        MDAlertView *alert = [MDAlertView alertViewWithStyle:MDAlertViewStyleDialog];
-        alert.message = json[@"msg"];
-        [alert show];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"error=%@", error);
     }];

@@ -17,6 +17,42 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.automaticallyAdjustsScrollViewInsets = NO;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [self.view removeObserver:self forKeyPath:@"frame"];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"frame"]) {
+        [self.view removeObserver:self forKeyPath:@"frame"];
+        [self setViewFrame];
+        [self.view addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionOld context:nil];
+    }
+}
+
+- (void)setViewFrame {
+    CGRect frame = CGRectMake(0, ToolbarHeight + StatusBarHeight, ScreenWidth, ScreenHeight - ToolbarHeight - StatusBarHeight);
+    self.view.frame = frame;
+}
+
+- (void)viewDidLayoutSubviews {
+    [self setViewFrame];
+}
+
+// 消除导航栏的返回按钮
+- (void)viewWillAppear:(BOOL)animated {
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:[[UIView alloc] init]];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:[[UIView alloc] init]];
+    [self.view addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionOld context:nil];
+}
+
+- (void)setTitle:(NSString *)title {
+    self.navigationController.title = title;
 }
 
 - (void)didReceiveMemoryWarning {

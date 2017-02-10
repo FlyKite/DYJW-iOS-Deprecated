@@ -15,6 +15,7 @@
                                      error:(NSError *__autoreleasing *)error {
     NSMutableURLRequest *mutableRequest = [super requestWithMethod:method URLString:URLString parameters:parameters error:error];
     if ([parameters isKindOfClass:NSString.class]) {
+        // 将请求体替换为目标字符串
         mutableRequest.HTTPBody = [parameters dataUsingEncoding:NSUTF8StringEncoding];
     }
     return mutableRequest;

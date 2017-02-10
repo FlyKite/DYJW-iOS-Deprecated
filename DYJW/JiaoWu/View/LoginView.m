@@ -249,6 +249,16 @@
 
 #pragma  mark - Login button click
 - (void)loginClick {
+    if (self.usernameField.text.length == 0) {
+        self.errorLabel.text = @"请输入用户名!";
+        return;
+    } else if (self.passwordField.text.length == 0) {
+        self.errorLabel.text = @"请输入密码!";
+        return;
+    } else if (self.verifycodeField.text.length == 0) {
+        self.errorLabel.text = @"请输入验证码!";
+        return;
+    }
     [self saveUser];
     JiaoWu *jiaowu = [[JiaoWu alloc] init];
     [jiaowu loginWithVerifycode:self.verifycodeField.text success:nil failure:nil];

@@ -43,6 +43,7 @@
                                         context:nil];
     return ceil(textRect.size.height);
 }
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -125,6 +126,7 @@
     self.title.text = model.title;
     self.desc.text = model.desc;
     [self setViewFrames];
+    [self.images reloadData];
 }
 
 
@@ -153,7 +155,8 @@
 @implementation ImageCell
 - (void)setImageName:(NSString *)imageName {
     _imageName = [imageName copy];
-    [self.image setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://dyjw.fly-kite.com/lmhp/thumbs/%@", imageName]]];
+    NSString *thumb = [NSString stringWithFormat:@"app/lmhp/thumbs?imageName=%@", imageName];
+    [self.image setImageWithURL:[NSURL URLWithString:CombineUrl(thumb)] placeholderImage:[UIImage imageNamed:@"holder_image"]];
 //    self.image 
 }
 
