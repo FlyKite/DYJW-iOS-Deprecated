@@ -1,4 +1,4 @@
-# ![Logo](https://raw.githubusercontent.com/FlyKite/DYJW-iOS/master/DYJW/Assets.xcassets/AppIcon.appiconset/appIcon%402x.png)东油教务 iOS App
+# ![Logo](https://raw.githubusercontent.com/FlyKite/DYJW-iOS/master/DYJW/Assets.xcassets/AppIcon.appiconset/appIcon-76.png)东油教务 iOS App
 An iOS application for students of NEPU to use the JiaoWuGuanLi system on iPhone.  
 iPhone上的东北石油大学教务管理系统。  
 
